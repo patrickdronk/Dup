@@ -1,10 +1,7 @@
 import {createEventDefinition, EventBus} from "ts-bus";
-import {AbstractEvent} from "./events";
+import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
 
-export const eventBus = new EventBus();
+export const eventbus = new EventBus();
 
-export const createEvent = createEventDefinition<AbstractEvent>()("bankAccount.events");
-
-interface EventInterface {
-    id: string
-}
+export const createEvent = createEventDefinition<BankAccountCreatedEvent>()("BankAccountCreatedEvent");
+export const createMoneyDepositedEvent = createEventDefinition<MoneyDepositedEvent>()("MoneyDepositedEvent");

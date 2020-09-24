@@ -1,9 +1,8 @@
 import {createEventDefinition, EventBus} from "ts-bus";
+import {CreateBankAccountCommand, DepositCommand} from "./commands";
 
-export const commandBus = new EventBus();
+export const commandbus = new EventBus();
 
-export const createBankAccountCommand = createEventDefinition<CreateBankAccountInterface>()("bankAccount.created");
-
-interface CreateBankAccountInterface {
-    id: string
-}
+// TBD  generate this boilerplate based on decorators
+export const createBankAccountCommand = createEventDefinition<CreateBankAccountCommand>()("CreateBankAccountCommand");
+export const depositMoneyCommand = createEventDefinition<DepositCommand>()("DepositCommand");

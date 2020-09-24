@@ -3,20 +3,11 @@ export abstract class AbstractCommand {
 }
 
 export class CreateBankAccountCommand extends AbstractCommand{
-    readonly id: string;
-
-    constructor(id: string) {
-        super();
-        this.id = id
-    }
+    id: string;
 }
 
-// export class DepositCommand {
-//     readonly id: string;
-//     amount: number;
-//
-//     constructor(id: string, amount: number) {
-//         this.id = id;
-//         this.amount = amount;
-//     }
-// }
+export class DepositCommand extends AbstractCommand{
+    //aggregateId
+    id: string;
+    amount: number;
+}

@@ -1,5 +1,5 @@
 
-import {callCommandEndpointCreateAccount} from "./api";
+import {ApilambdaHandler} from "./ApilambdaHandler";
 import {CommandProcessor} from "./process/CommandProcessor";
 import {EventProcessor} from "./process/EventProcessor";
 
@@ -11,7 +11,7 @@ eventProcessor.listen();
 
 
 //entrypoint API
-callCommandEndpointCreateAccount();
+ApilambdaHandler();
 
 //unsubscribing
 commandProcessor.unlisten();
