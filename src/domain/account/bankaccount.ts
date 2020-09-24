@@ -25,13 +25,16 @@ export class BankAccount extends Aggregate {
 
     @EventHandler
     onBankAccountCreatedEvent(event: BankAccountCreatedEvent) {
+        console.log('CALLED create'+JSON.stringify(event))
         this.bankAccountId = event.id;
     }
 
     @EventHandler
     onMoneyDepositedEvent(event: MoneyDepositedEvent) {
+        console.log('CALLED money'+JSON.stringify(event))
         this.balance += event.amount;
     }
+
 
     static create(command: CreateBankAccountCommand) {
         return new BankAccount().handle(command)

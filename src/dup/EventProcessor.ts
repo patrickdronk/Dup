@@ -32,12 +32,24 @@ export class EventProcessor {
         allDomainEventsByAggregateId.forEach((event: any) => {
             // console.log(event.payload_type);
             // JSON.parse(event.payload);
-            // const temp = Reflect.getMetadata("eventhandler", event.payload)
+            try {
+
+                console.log('lookup')
+                const temp = Reflect.getMetadata("eventhandler",aggregate);
+                // const temp = Reflect.getMetadata("eventhandler", "on"+event.payload_type);
+                // temp(event.payload)
+                console.log('class'+temp)
+
+            }catch (e) {
+                console.log(e.toString())
+            }
+
 
 
             // if(aggregate[event.payload_type]){
             //     aggregate[event.payload_type](event.payload_type)
             // }
+
 
         })
     }
