@@ -1,5 +1,5 @@
 import {CommandHandler, EventHandler} from "../../decorators";
-import {CreateBankAccountCommand,AbstractCommand} from "../../process/commands";
+import {CreateBankAccountCommand} from "../../process/commands";
 import {BankAccountCreatedEvent} from "../../process/events";
 import {Aggregate} from "./aggregate";
 
