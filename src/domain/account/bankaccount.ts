@@ -12,7 +12,7 @@ export class BankAccount extends Aggregate {
 
     @CommandHandler
     handle(command: CreateBankAccountCommand) {
-        this.apply(new BankAccountCreatedEvent(command.id))
+        this.apply(new BankAccountCreatedEvent(command.id));
         eventbus.publish(createEvent(new BankAccountCreatedEvent(command.id)));
     }
 
@@ -25,12 +25,12 @@ export class BankAccount extends Aggregate {
 
     @EventHandler
     onBankAccountCreatedEvent(event: BankAccountCreatedEvent) {
-        console.log("Processed event in aggregate "+JSON.stringify(event))
+        console.log("Processed event in aggregate "+JSON.stringify(event));
         this.bankAccountId = event.id;
     }
     @EventHandler
     onMoneyDepositedEvent(event: MoneyDepositedEvent) {
-        console.log("Processed money in aggregate "+JSON.stringify(event))
+        console.log("Processed money in aggregate "+JSON.stringify(event));
         this.balance += event.amount;
         console.log('state '+this.balance)
     }

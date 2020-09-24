@@ -1,5 +1,5 @@
 import {BankAccount} from "../domain/account/bankaccount";
-import {AbstractEvent, BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
+import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
 import {Aggregate} from "../domain/account/aggregate";
 import {eventbus} from "./eventbus";
 import eventRepository from "../domain/EventRepository";
@@ -34,10 +34,16 @@ export class EventProcessor {
     private async getAllEvents(aggregate: Aggregate, aggregateId: string): Promise<void> {
         //REPO to fetch domainEvents here
         const allDomainEventsByAggregateId = await eventRepository.getAllDomainEventsByAggregateId(aggregateId);
-        allDomainEventsByAggregateId.forEach(event => {
-            console.log(event.payload_type);
-            JSON.parse(event.payload);
-            // aggregate['on'+event.payload_type]
+        allDomainEventsByAggregateId.forEach((event: any) => {
+            // console.log(event.payload_type);
+            // JSON.parse(event.payload);
+            // const temp = Reflect.getMetadata("eventhandler", event.payload)
+
+
+            // if(aggregate[event.payload_type]){
+            //     aggregate[event.payload_type](event.payload_type)
+            // }
+
         })
     }
 }
