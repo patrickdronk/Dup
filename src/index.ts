@@ -1,30 +1,14 @@
-import {CreateBankAccountCommand} from "./domain/commands";
-import {CommandHandler, EventHandler} from "./decorators";
-import {BankAccountCreatedEvent} from "./domain/events";
 
-abstract class Aggregate {
-    apply(event: any): void {
-        console.log("log to store")
-    }
-}
+import {callCommandEndpointCreateAccount} from "./api";
+import {CommandProcessor} from "./process/CommandProcessor";
 
-class BankAccount extends Aggregate {
-    private bankAccountId?: string
+//making the handler listen
+const accountCreatedHandler = new CommandProcessor();
+accountCreatedHandler.listen();
 
-    @CommandHandler
-    handle(command: CreateBankAccountCommand) {
-        this.apply(new BankAccountCreatedEvent(command.id))
-    }
+//entrypoint API
+callCommandEndpointCreateAccount();
 
-    @EventHandler
-    on(event: BankAccountCreatedEvent) {
-        this.bankAccountId = event.id
-    }
-}
+//unsubscribing
+accountCreatedHandler.unlisten();
 
-const command = new CreateBankAccountCommand("hi")
-
-//commandbus
-const bankAccountAggregate = new BankAccount()
-
-bankAccountAggregate.handle(command)

@@ -1,5 +1,11 @@
+import {commandBus, createBankAccountCommand} from "./process/commandBus";
 
-// http -> command
+export function callCommandEndpointCreateAccount(): void {
+    //POST with id 1234
 
-// apply -> bus pakt eventstream van aggregate.
-// apply evenstream over aggragate
+
+
+
+
+    commandBus.publish(createBankAccountCommand({id: "123456789"}));
+}
