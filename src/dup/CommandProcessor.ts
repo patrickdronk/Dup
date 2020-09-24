@@ -1,5 +1,5 @@
 import {commandbus} from "./commandbus";
-import {BankAccount} from "../domain/account/bankaccount";
+import {BankaccountAggregate} from "../domain/account/bankaccountAggregate";
 import {DepositCommand} from "../domain/account/commands";
 
 export class CommandProcessor {
@@ -9,10 +9,10 @@ export class CommandProcessor {
 
     listen(): void {
         this.unsubscribe = commandbus.subscribe("CreateBankAccountCommand", event => {
-            const bankAccount = new BankAccount().handle(event.payload);
+            const bankAccount = new BankaccountAggregate().handle(event.payload);
         })
         this.unsubscribe2 = commandbus.subscribe("DepositCommand", event => {
-            const bankAccount = new BankAccount().handleDepositCommand(event.payload);
+            const bankAccount = new BankaccountAggregate().handleDepositCommand(event.payload);
         })
     }
 

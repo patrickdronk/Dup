@@ -4,10 +4,8 @@ import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
 import {Aggregate} from "./aggregate";
 import {createEvent, createMoneyDepositedEvent, eventbus} from "../../dup/eventbus";
 
-
-export class BankAccount extends Aggregate {
-
-    private bankAccountId?: string;
+export class BankaccountAggregate extends Aggregate {
+    private bankAccountId: string | null = null;
     private balance = 0;
 
     @CommandHandler
@@ -23,20 +21,14 @@ export class BankAccount extends Aggregate {
     }
 
 
-    @EventHandler
+    @EventHandler()
     onBankAccountCreatedEvent(event: BankAccountCreatedEvent) {
-        console.log('CALLED create'+JSON.stringify(event))
+        console.log(event)
         this.bankAccountId = event.id;
     }
 
-    @EventHandler
-    onMoneyDepositedEvent(event: MoneyDepositedEvent) {
-        console.log('CALLED money'+JSON.stringify(event))
-        this.balance += event.amount;
-    }
-
-
-    static create(command: CreateBankAccountCommand) {
-        return new BankAccount().handle(command)
-    }
+    // @EventHandler()
+    // onMoneyDepositedEvent(event: MoneyDepositedEvent) {
+    //     this.balance += event.amount;
+    // }
 }

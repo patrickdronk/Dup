@@ -11,7 +11,7 @@ class EventRepository {
         })
     }
 
-    getMaxEventSequenceNumberForAggregate(aggregateId: string):Promise<number> {
+    getMaxEventSequenceNumberForAggregate(aggregateId: string): Promise<number> {
         const query = `SELECT 0+max(eventsequencenumber)+1
                         FROM domain_event
                         WHERE aggregateidentifier = '${aggregateId}'`;
@@ -20,15 +20,14 @@ class EventRepository {
 
     async save(event: domain_event) {
         try {
-            await prisma.domain_event.create({
-                data: {
-                    ...event,
-                    eventsequencenumber: await this.getMaxEventSequenceNumberForAggregate(event.aggregateidentifier),
-                }
-            });
-        }catch (e) {
-            console.log('fout')
-            console.error(e.toString())
+            // await prisma.domain_event.create({
+            //     data: {
+            //         ...event,
+            //         eventsequencenumber: await this.getMaxEventSequenceNumberForAggregate(event.aggregateidentifier),
+            //     }
+            // });
+        } catch (e) {
+            console.log(e.toString())
         }
     }
 }
