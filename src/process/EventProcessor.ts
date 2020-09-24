@@ -2,6 +2,7 @@ import {BankAccount} from "../domain/account/bankaccount";
 import {AbstractEvent, BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
 import {Aggregate} from "../domain/account/aggregate";
 import {eventbus} from "./eventbus";
+import eventRepository from "../domain/EventRepository";
 
 export class EventProcessor {
     unsubscribe: any;
@@ -9,18 +10,18 @@ export class EventProcessor {
 
     listen(): void {
         this.unsubscribe = eventbus.subscribe("BankAccountCreatedEvent", event => {
-            console.log("Processed event in bankaccount: "+JSON.stringify(event));
+            console.log("Processed event in bankaccount: " + JSON.stringify(event));
 
             const aggregate = new BankAccount();
             // this.processEvents(aggregate, this.getAllEvents());
             aggregate.onBankAccountCreatedEvent(event.payload);
         });
 
-        this.unsubscribe2 = eventbus.subscribe("MoneyDepositedEvent", event => {
-            console.log("Processed event in money: "+JSON.stringify(event));
+        this.unsubscribe2 = eventbus.subscribe("MoneyDepositedEvent", async event => {
+            console.log("Processed event in money: " + JSON.stringify(event));
 
             const aggregate = new BankAccount();
-            // this.processEvents(aggregate, this.getAllEvents());
+            await this.getAllEvents(aggregate, event.payload.id);
             aggregate.onMoneyDepositedEvent(event.payload);
         });
     }
@@ -30,15 +31,13 @@ export class EventProcessor {
         this.unsubscribe2();
     }
 
-    private getAllEvents():AbstractEvent[] {
+    private async getAllEvents(aggregate: Aggregate, aggregateId: string): Promise<void> {
         //REPO to fetch domainEvents here
-        return [new BankAccountCreatedEvent("1")];
-    }
-
-
-    private processEvents(aggregate: Aggregate, allEvents: AbstractEvent[]) {
-        // allEvents.forEach(event=>{
-        //     aggregate.apply(event);
-        // });
+        const allDomainEventsByAggregateId = await eventRepository.getAllDomainEventsByAggregateId(aggregateId);
+        allDomainEventsByAggregateId.forEach(event => {
+            console.log(event.payload_type);
+            JSON.parse(event.payload);
+            // aggregate['on'+event.payload_type]
+        })
     }
 }

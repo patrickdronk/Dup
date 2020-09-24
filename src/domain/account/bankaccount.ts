@@ -6,6 +6,7 @@ import {createEvent, createMoneyDepositedEvent, eventbus} from "../../process/ev
 
 
 export class BankAccount extends Aggregate {
+
     private bankAccountId?: string;
     private balance = 0;
 
