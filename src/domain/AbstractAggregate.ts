@@ -1,5 +1,8 @@
+import eventRepository from "./EventRepository";
+import {Event} from "./events";
+
 export abstract class Aggregate {
-    apply(event: any): void {
-        console.log("log to store")
+    apply(event: Event): void {
+        eventRepository.save(event)
     }
 }
