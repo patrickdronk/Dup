@@ -15,6 +15,7 @@ export class BankAccount extends Aggregate {
 
     @EventHandler
     on(event: BankAccountCreatedEvent) {
+        console.log("Processed event in aggregate "+JSON.stringify(event))
         this.bankAccountId = event.id
     }
 
