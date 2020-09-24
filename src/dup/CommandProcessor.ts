@@ -1,6 +1,6 @@
 import {commandbus} from "./commandbus";
 import {BankAccount} from "../domain/account/bankaccount";
-import {DepositCommand} from "./commands";
+import {DepositCommand} from "../domain/account/commands";
 
 export class CommandProcessor {
 
@@ -9,13 +9,9 @@ export class CommandProcessor {
 
     listen(): void {
         this.unsubscribe = commandbus.subscribe("CreateBankAccountCommand", event => {
-            console.log("Processing command account created: "+JSON.stringify(event.payload));
-            //store bankAccount in DB
             const bankAccount = new BankAccount().handle(event.payload);
         })
         this.unsubscribe2 = commandbus.subscribe("DepositCommand", event => {
-            console.log("Processing command deposit: "+JSON.stringify(event.payload));
-            //store bankAccount in DB
             const bankAccount = new BankAccount().handleDepositCommand(event.payload);
         })
     }

@@ -1,5 +1,5 @@
 import {createEventDefinition, EventBus} from "ts-bus";
-import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
+import {BankAccountCreatedEvent, MoneyDepositedEvent} from "../domain/account/events";
 
 export const eventbus = new EventBus();
 

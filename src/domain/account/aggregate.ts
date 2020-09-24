@@ -1,19 +1,18 @@
-import {createEvent, eventbus} from "../../process/eventbus";
 import eventRepository from "../EventRepository";
-import {uuid} from "uuidv4";
+import {v4} from 'uuid';
 import dayjs = require("dayjs");
 
 export abstract class Aggregate {
 
     apply(event: any): void {
-        console.log("log to store event: ", event);
         eventRepository.save({
-            eventidentifier: 5,
+            eventidentifier: v4(),
             aggregateidentifier: event.id,
-            eventsequencenumber: 2,  //TODO
+            eventsequencenumber: undefined,
             payload: JSON.stringify(event),
             payload_type: event.constructor.name,
             timestamp: dayjs().toISOString()
         });
     }
+
 }

@@ -1,8 +1,8 @@
-import {CommandHandler, EventHandler} from "../../decorators";
-import {CreateBankAccountCommand, DepositCommand} from "../../process/commands";
-import {BankAccountCreatedEvent, MoneyDepositedEvent} from "../../process/events";
+import {CommandHandler, EventHandler} from "../../dup/decorators";
+import {CreateBankAccountCommand, DepositCommand} from "./commands";
+import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
 import {Aggregate} from "./aggregate";
-import {createEvent, createMoneyDepositedEvent, eventbus} from "../../process/eventbus";
+import {createEvent, createMoneyDepositedEvent, eventbus} from "../../dup/eventbus";
 
 
 export class BankAccount extends Aggregate {
@@ -18,21 +18,19 @@ export class BankAccount extends Aggregate {
 
     @CommandHandler
     handleDepositCommand(command: DepositCommand) {
-        this.apply(new BankAccountCreatedEvent(command.id));
-        eventbus.publish(createMoneyDepositedEvent(new MoneyDepositedEvent(command.id,command.amount)));
+        this.apply(new MoneyDepositedEvent(command.id, command.amount));
+        eventbus.publish(createMoneyDepositedEvent(new MoneyDepositedEvent(command.id, command.amount)));
     }
 
 
     @EventHandler
     onBankAccountCreatedEvent(event: BankAccountCreatedEvent) {
-        console.log("Processed event in aggregate "+JSON.stringify(event));
         this.bankAccountId = event.id;
     }
+
     @EventHandler
     onMoneyDepositedEvent(event: MoneyDepositedEvent) {
-        console.log("Processed money in aggregate "+JSON.stringify(event));
         this.balance += event.amount;
-        console.log('state '+this.balance)
     }
 
     static create(command: CreateBankAccountCommand) {

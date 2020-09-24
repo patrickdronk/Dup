@@ -1,5 +1,5 @@
 import {createEventDefinition, EventBus} from "ts-bus";
-import {CreateBankAccountCommand, DepositCommand} from "./commands";
+import {CreateBankAccountCommand, DepositCommand} from "../domain/account/commands";
 
 export const commandbus = new EventBus();
 

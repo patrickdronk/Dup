@@ -1,8 +1,4 @@
 import {domain_event, PrismaClient} from '@prisma/client'
-import {Event} from "./events";
-import dayjs, {Dayjs} from "dayjs";
-import {uuid} from 'uuidv4';
-
 
 const prisma = new PrismaClient()
 
@@ -15,12 +11,25 @@ class EventRepository {
         })
     }
 
+    getMaxEventSequenceNumberForAggregate(aggregateId: string):Promise<number> {
+        const query = `SELECT 0+max(eventsequencenumber)
+                        FROM domain_event
+                        WHERE aggregateidentifier = '${aggregateId}'`;
+        return prisma.$executeRaw(query)
+    }
+
     async save(event: domain_event) {
-        // @ts-ignore
-        const payload = JSON.stringify(event)
-        await prisma.domain_event.create({
-            data: event
-        });
+        try {
+            await prisma.domain_event.create({
+                data: {
+                    ...event,
+                    eventsequencenumber: await this.getMaxEventSequenceNumberForAggregate(event.aggregateidentifier),
+                }
+            });
+        }catch (e) {
+            console.log('fout')
+            console.error(e.toString())
+        }
     }
 }
 
