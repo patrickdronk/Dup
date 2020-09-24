@@ -8,7 +8,7 @@ datasource db {
 }
 
 model domain_event {
-  eventidentifier     Int    @id
+  eventidentifier     String @id
   aggregateidentifier String
   eventsequencenumber Int
   payload             String

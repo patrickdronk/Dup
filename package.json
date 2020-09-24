@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@prisma/cli": "2.7.1",
-    "@prisma/client": "2.7.1",
+    "@prisma/client": "^2.7.1",
     "dayjs": "^1.8.36",
     "pg": "^8.3.3",
     "reflect-metadata": "^0.1.13",

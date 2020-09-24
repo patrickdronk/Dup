@@ -13,6 +13,13 @@ class EventRepository {
         })
     }
 
+    getMaxEventSequenceNumberForAggregate(aggregateId: string) {
+        const query = `SELECT max(eventsequencenumber) 
+                       FROM domain_event
+                       WHERE aggregateidentifier = ${aggregateId}`
+        return prisma.executeRaw(query)
+    }
+
     async save(event: Event) {
         // @ts-ignore
         const payload = JSON.stringify(event)
