@@ -1,11 +1,12 @@
 import {CommandProcessor} from "./dup/command/CommandProcessor";
 import {EventProcessor} from "./dup/event/EventProcessor";
 import {commandbus, createBankAccountCommand, depositMoneyCommand} from "./dup/command/commandbus";
+import {GenericEventProcessor} from "./dup/event/GenericEventProcessor";
 
 //making the handler listen
 const commandProcessor = new CommandProcessor();
 commandProcessor.listen();
-const eventProcessor = new EventProcessor();
+const eventProcessor = new GenericEventProcessor();
 eventProcessor.listen();
 
 //entrypoint API

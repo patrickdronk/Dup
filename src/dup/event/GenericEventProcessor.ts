@@ -1,23 +1,29 @@
-import {BankAccountCreatedEvent} from "../../domain/account/events";
-import {BaseAggregate} from "../aggregate/baseAggregate";
-import {eventbus} from "./eventbus";
+import {BaseAggregate} from "../domain/baseAggregate";
 import eventRepository from "../EventRepository";
 
 // @ts-ignore
 import {domain_event} from '@prisma/client'
 import aggregateStore from "../store/AggregateStore";
+import eventStore from "../store/EventStore";
+import eventBus from "./eventbus";
 
 export class GenericEventProcessor {
-    unsubscribe: any;
+    unsubscribes: Function[] = [];
 
     listen(): void {
-        this.unsubscribe = eventbus.subscribe("BankAccountCreatedEvent", async event => {
-            await this.processEventHistory(event.payload.id)
-        });
+        const store = eventStore.getStore();
+        console.log(Object.getOwnPropertyNames(store));
+        Object.getOwnPropertyNames(store).forEach((eventId: string) => {
+            console.log("listen to ", eventId)
+            this.unsubscribes.push(eventBus.subscribe(eventId, async (event: any) => {
+                await this.processEventHistory(event.payload.id)
+            }))
+        })
+
     }
 
     unlisten(): void {
-        this.unsubscribe();
+        this.unsubscribes.forEach(unsubscribe => unsubscribe());
     }
 
     private async processEventHistory(aggregateId: string): Promise<void> {

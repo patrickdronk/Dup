@@ -1,6 +1,6 @@
 import {BankAccountCreatedEvent} from "../../domain/account/events";
-import {BaseAggregate} from "../aggregate/baseAggregate";
-import {eventbus} from "./eventbus";
+import {BaseAggregate} from "../domain/baseAggregate";
+import {eventBus} from "./eventbus";
 import eventRepository from "../EventRepository";
 import { AggregateStore } from "../store/AggregateStore";
 import {domain_event} from '@prisma/client'

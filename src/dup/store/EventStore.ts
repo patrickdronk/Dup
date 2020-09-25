@@ -1,4 +1,5 @@
-class AggregateStore {
+class EventStore {
+
     store: any = {};
 
     addToStore(aggregate: Function) {
@@ -10,6 +11,6 @@ class AggregateStore {
     }
 }
 
-const aggregateStore = new AggregateStore();
-export default aggregateStore;
+const eventStore = new EventStore();
+export default eventStore;
 

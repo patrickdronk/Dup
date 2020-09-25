@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import aggregateStore from "./store/AggregateStore";
+import eventStore from "./store/EventStore";
 
 
 export function CommandHandler(target: any, name: any, desc: any) {
@@ -14,4 +15,8 @@ export function EventHandler() {
 
 export function aggregate(constructor: Function) {
     aggregateStore.addToStore(constructor)
+}
+
+export function event(constructor: Function) {
+    eventStore.addToStore(constructor)
 }

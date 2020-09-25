@@ -1,8 +1,8 @@
 import {aggregate, CommandHandler, EventHandler} from "../../dup/decorators";
 import {CreateBankAccountCommand, DepositCommand} from "./commands";
 import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
-import {BaseAggregate} from "../../dup/aggregate/baseAggregate";
-import {createEvent, createMoneyDepositedEvent, eventbus} from "../../dup/event/eventbus";
+import {BaseAggregate} from "../../dup/domain/baseAggregate";
+import eventBus from "../../dup/event/EventBus";
 
 @aggregate
 export class BankAccountAggregate extends BaseAggregate {
@@ -12,13 +12,13 @@ export class BankAccountAggregate extends BaseAggregate {
     @CommandHandler
     handle(command: CreateBankAccountCommand) {
         this.apply(new BankAccountCreatedEvent(command.id));
-        eventbus.publish(createEvent(new BankAccountCreatedEvent(command.id)));
+        eventBus.publish(new BankAccountCreatedEvent(command.id));
     }
 
     @CommandHandler
     handleDepositCommand(command: DepositCommand) {
         this.apply(new MoneyDepositedEvent(command.id, command.amount));
-        eventbus.publish(createMoneyDepositedEvent(new MoneyDepositedEvent(command.id, command.amount)));
+        eventBus.publish(new MoneyDepositedEvent(command.id, command.amount));
     }
 
 
