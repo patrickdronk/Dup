@@ -1,14 +1,10 @@
-import {BankaccountAggregate} from "../domain/account/bankaccountAggregate";
 import {BankAccountCreatedEvent, MoneyDepositedEvent} from "../domain/account/events";
 import {Aggregate} from "../domain/account/aggregate";
 import {eventbus} from "./eventbus";
 import eventRepository from "./EventRepository";
 import { AggregateStore } from "../AggregateStore";
 
-export interface Type<T> {
-    new(...args: any[]): T;
-}
-
+//Todo -> GenericEventProcessor
 export class EventProcessor {
     unsubscribe: any;
     unsubscribe2: any;

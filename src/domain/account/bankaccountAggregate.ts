@@ -23,7 +23,6 @@ export class BankaccountAggregate extends Aggregate {
 
     @EventHandler()
     onBankAccountCreatedEvent(event: BankAccountCreatedEvent) {
-        console.log(event)
         this.bankAccountId = event.id;
     }
 
