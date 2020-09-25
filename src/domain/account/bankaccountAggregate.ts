@@ -5,7 +5,7 @@ import {Aggregate} from "../../dup/aggregate";
 import {createEvent, createMoneyDepositedEvent, eventbus} from "../../dup/eventbus";
 
 export class BankaccountAggregate extends Aggregate {
-    private bankAccountId: string | null = null;
+    private bankAccountId: string | undefined;
     private balance = 0;
 
     //region commandHandlers
