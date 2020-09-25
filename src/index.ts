@@ -9,8 +9,9 @@ const eventProcessor = new EventProcessor();
 eventProcessor.listen();
 
 //entrypoint API
-commandbus.publish(createBankAccountCommand({id: "123456789"}));
-commandbus.publish(depositMoneyCommand({id: "123456789",amount:10.00}));
+commandbus.publish(createBankAccountCommand({id: "1234567890"}));
+
+commandbus.publish(depositMoneyCommand({id: "1234567890",amount:10.00}));
 
 //unsubscribing
 commandProcessor.unlisten();

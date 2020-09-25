@@ -22,7 +22,6 @@ export class BankAccount extends Aggregate {
         eventbus.publish(createMoneyDepositedEvent(new MoneyDepositedEvent(command.id, command.amount)));
     }
 
-
     @EventHandler
     onBankAccountCreatedEvent(event: BankAccountCreatedEvent) {
         console.log('CALLED create'+JSON.stringify(event))

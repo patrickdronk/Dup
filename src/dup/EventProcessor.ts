@@ -29,16 +29,13 @@ export class EventProcessor {
     private async procesEventHistory(aggregate: Aggregate, aggregateId: string): Promise<void> {
         //REPO to fetch domainEvents here
         const allDomainEventsByAggregateId = await eventRepository.getAllDomainEventsByAggregateId(aggregateId);
+        console.log('replaying '+allDomainEventsByAggregateId.length)
         allDomainEventsByAggregateId.forEach((event: any) => {
-            // console.log(event.payload_type);
-            // JSON.parse(event.payload);
             try {
-
-                console.log('lookup')
-                const temp = Reflect.getMetadata("eventhandler",aggregate);
+                // const temp = Reflect.getMetadata("eventhandler",aggregate);
                 // const temp = Reflect.getMetadata("eventhandler", "on"+event.payload_type);
                 // temp(event.payload)
-                console.log('class'+temp)
+                // console.log('class'+temp)
 
             }catch (e) {
                 console.log(e.toString())
