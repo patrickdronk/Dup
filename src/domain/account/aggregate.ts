@@ -9,7 +9,7 @@ export abstract class Aggregate {
             aggregateidentifier: event.id,
             aggregate_type: "BankaccountAggregate",
             eventsequencenumber: undefined,
-            payload: JSON.stringify(event),w
+            payload: JSON.stringify(event),
             payload_type: event.constructor.name,
             timestamp: dayjs().toISOString()
         });
