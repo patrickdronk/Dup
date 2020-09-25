@@ -1,7 +1,7 @@
 import {CommandHandler, EventHandler} from "../../dup/decorators";
 import {CreateBankAccountCommand, DepositCommand} from "./commands";
 import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
-import {Aggregate} from "./aggregate";
+import {Aggregate} from "../../dup/aggregate";
 import {createEvent, createMoneyDepositedEvent, eventbus} from "../../dup/eventbus";
 
 export class BankaccountAggregate extends Aggregate {

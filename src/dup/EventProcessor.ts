@@ -1,5 +1,5 @@
 import {BankAccountCreatedEvent, MoneyDepositedEvent} from "../domain/account/events";
-import {Aggregate} from "../domain/account/aggregate";
+import {Aggregate} from "./aggregate";
 import {eventbus} from "./eventbus";
 import eventRepository from "./EventRepository";
 import { AggregateStore } from "../AggregateStore";

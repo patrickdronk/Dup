@@ -1,4 +1,4 @@
-import eventRepository from "../../dup/EventRepository";
+import eventRepository from "./EventRepository";
 import {v4} from 'uuid';
 import dayjs = require("dayjs");
 import { domain_event } from "@prisma/client";
