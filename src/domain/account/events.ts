@@ -1,8 +1,6 @@
-export abstract class AbstractEvent {
-}
+import {Event} from "../../dup/event";
 
-export class BankAccountCreatedEvent implements AbstractEvent{
-
+export class BankAccountCreatedEvent implements Event {
     id: string;
 
     constructor(id: string) {
@@ -10,13 +8,22 @@ export class BankAccountCreatedEvent implements AbstractEvent{
     }
 }
 
-export class MoneyDepositedEvent implements AbstractEvent{
-
+export class MoneyDepositedEvent implements Event {
     id: string;
     amount: number;
 
-    constructor(id: string, amount:number) {
+    constructor(id: string, amount: number) {
         this.id = id;
         this.amount = amount
+    }
+}
+
+export class MoneyWithdrewEvent implements Event {
+    id: string;
+    amount: number;
+
+    constructor(id: string, amount: number) {
+        this.id = id;
+        this.amount = amount;
     }
 }

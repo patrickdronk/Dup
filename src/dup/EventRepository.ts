@@ -20,12 +20,12 @@ class EventRepository {
 
     async save(event: domain_event) {
         try {
-            // await prisma.domain_event.create({
-            //     data: {
-            //         ...event,
-            //         eventsequencenumber: await this.getMaxEventSequenceNumberForAggregate(event.aggregateidentifier),
-            //     }
-            // });
+            await prisma.domain_event.create({
+                data: {
+                    ...event,
+                    eventsequencenumber: await this.getMaxEventSequenceNumberForAggregate(event.aggregateidentifier),
+                }
+            });
         } catch (e) {
             console.log(e.toString())
         }

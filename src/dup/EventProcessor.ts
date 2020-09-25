@@ -10,17 +10,17 @@ export class EventProcessor {
     unsubscribe2: any;
 
     listen(): void {
-        this.unsubscribe = eventbus.subscribe("BankAccountCreatedEvent", async event => {
-            await this.procesEventHistory(event.payload.id)
-        });
-
+        // this.unsubscribe = eventbus.subscribe("BankAccountCreatedEvent", async event => {
+        //     await this.procesEventHistory(event.payload.id)
+        // });
+        //
         // this.unsubscribe2 = eventbus.subscribe("MoneyDepositedEvent", async event => {
         //     await this.procesEventHistory(event.payload.id);
         // });
     }
 
     unlisten(): void {
-        this.unsubscribe();
+        // this.unsubscribe();
         // this.unsubscribe2();
     }
 

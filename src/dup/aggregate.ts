@@ -4,8 +4,8 @@ import dayjs = require("dayjs");
 import { domain_event } from "@prisma/client";
 
 export abstract class Aggregate {
-    apply(event: any): void {
-        eventRepository.save({
+    async apply(event: any): Promise<void> {
+        await eventRepository.save({
             eventidentifier: v4(),
             aggregateidentifier: event.id,
             aggregate_type: "BankaccountAggregate",
@@ -21,7 +21,7 @@ export abstract class Aggregate {
             //ToDo find by argumentType
             const reflection = Reflect.getMetadata(`on${event.payload_type}`, this)
             // @ts-ignore
-            this[reflection](event.payload)
+            this[reflection](JSON.parse(event.payload))
         })
     }
 }
