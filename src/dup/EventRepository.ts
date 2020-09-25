@@ -19,6 +19,7 @@ class EventRepository {
     }
 
     async save(event: domain_event) {
+        console.log(event)
         try {
             await prisma.domain_event.create({
                 data: {
@@ -32,5 +33,5 @@ class EventRepository {
     }
 }
 
-const eventRepository = new EventRepository()
-export default eventRepository
+const eventRepository = new EventRepository();
+export default eventRepository;

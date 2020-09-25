@@ -11,8 +11,17 @@ type DubResult {
 }
 
 input CreateBankAccountCommand{
-    accountId: String
-    accountAlias: String
+    aggregateIdentifier: String
+}
+
+input DepositCommand{
+    aggregateIdentifier: String
+    amount: Float
+}
+
+input WithdrawalCommand{
+    aggregateIdentifier: String
+    amount: Float
 }
 
 type Query {
@@ -20,7 +29,9 @@ type Query {
 }
 
 type Mutation {
-	createBankAccount(account: CreateBankAccountCommand!): DubResult
+	createBankAccount(createBankAccountCommand: CreateBankAccountCommand!): DubResult
+	depositCommand(depositCommand: DepositCommand!): DubResult
+	withdrawalCommand(withdrawalCommand: WithdrawalCommand!): DubResult
 }
 
 schema {

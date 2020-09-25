@@ -1,15 +1,16 @@
 import eventRepository from "./EventRepository";
+import {Event} from "../dup/event";
 import {v4} from 'uuid';
 import dayjs = require("dayjs");
-import { domain_event } from "@prisma/client";
+import {domain_event} from "@prisma/client";
 
 export abstract class Aggregate {
-    async apply(event: any): Promise<void> {
+    async apply(event: Event): Promise<void> {
         await eventRepository.save({
             eventidentifier: v4(),
             aggregateidentifier: event.id,
-            aggregate_type: "BankaccountAggregate",
-            eventsequencenumber: undefined,
+            aggregate_type: this.constructor.name,
+            eventsequencenumber: 0,
             payload: JSON.stringify(event),
             payload_type: event.constructor.name,
             timestamp: dayjs().toISOString()

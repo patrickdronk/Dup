@@ -1,11 +1,12 @@
 {
-  "name": "up-framework",
+  "name": "dup-framework",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only src/index.ts",
     "pretest": "eslint --ignore-path .gitignore . --fix",
+    "prisma": "prisma generate",
     "start-sls-local": "serverless offline start"
   },
   "husky": {
