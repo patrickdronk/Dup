@@ -1,0 +1,29 @@
+type Sugar {
+    some: String
+}
+
+type QuerySome {
+    Some: String
+}
+
+type DubResult {
+	message: String
+}
+
+input CreateBankAccountCommand{
+    accountId: String
+    accountAlias: String
+}
+
+type Query {
+ 	testMessage: Sugar
+}
+
+type Mutation {
+	createBankAccount(account: CreateBankAccountCommand!): DubResult
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+}

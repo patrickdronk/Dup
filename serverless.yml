@@ -1,0 +1,25 @@
+service: demo-apollo-server-lambda
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-1
+functions:
+  graphql:
+    handler: src/gateway/graphql/apollo-server.graphqlHandler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  webpack:
+    includeModules: true

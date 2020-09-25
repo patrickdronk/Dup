@@ -6,3 +6,5 @@ yarn-error.log
 
 node_modules
 /cicd/postgres-data/
+/.webpack/
+/.serverless/
