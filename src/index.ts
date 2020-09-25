@@ -1,6 +1,6 @@
-import {CommandProcessor} from "./dup/CommandProcessor";
-import {EventProcessor} from "./dup/EventProcessor";
-import {commandbus, createBankAccountCommand, depositMoneyCommand} from "./dup/commandbus";
+import {CommandProcessor} from "./dup/command/CommandProcessor";
+import {EventProcessor} from "./dup/event/EventProcessor";
+import {commandbus, createBankAccountCommand, depositMoneyCommand} from "./dup/command/commandbus";
 
 //making the handler listen
 const commandProcessor = new CommandProcessor();

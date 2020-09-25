@@ -1,4 +1,6 @@
 import "reflect-metadata";
+import aggregateStore from "./store/AggregateStore";
+
 
 export function CommandHandler(target: any, name: any, desc: any) {
 }
@@ -8,4 +10,8 @@ export function EventHandler() {
         console.log(`wrote meta under key: ${desc.value.name}`)
         Reflect.defineMetadata(desc.value.name, desc.value.name, target);
     }
+}
+
+export function aggregate(constructor: Function) {
+    aggregateStore.addToStore(constructor)
 }

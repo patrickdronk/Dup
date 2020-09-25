@@ -1,9 +1,10 @@
-import eventRepository from "../../dup/EventRepository";
+import eventRepository from "../EventRepository";
 import {v4} from 'uuid';
 import dayjs = require("dayjs");
+// @ts-ignore
 import { domain_event } from "@prisma/client";
 
-export abstract class Aggregate {
+export abstract class BaseAggregate {
     apply(event: any): void {
         eventRepository.save({
             eventidentifier: v4(),

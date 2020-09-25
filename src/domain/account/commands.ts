@@ -1,6 +1,4 @@
-export abstract class AbstractCommand {
-
-}
+export abstract class AbstractCommand {}
 
 export class CreateBankAccountCommand extends AbstractCommand{
     id: string;

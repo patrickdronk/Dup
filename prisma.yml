@@ -1,0 +1,5 @@
+generate:
+  - generator: typescript-client
+    output: ../src/generated/prisma-client/
+  - generator: graphql-schema # <-- Add graphql-schema generator
+    output: ../src/generated/

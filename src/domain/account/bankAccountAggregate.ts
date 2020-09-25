@@ -1,10 +1,11 @@
-import {CommandHandler, EventHandler} from "../../dup/decorators";
+import {aggregate, CommandHandler, EventHandler} from "../../dup/decorators";
 import {CreateBankAccountCommand, DepositCommand} from "./commands";
 import {BankAccountCreatedEvent, MoneyDepositedEvent} from "./events";
-import {Aggregate} from "./aggregate";
-import {createEvent, createMoneyDepositedEvent, eventbus} from "../../dup/eventbus";
+import {BaseAggregate} from "../../dup/aggregate/baseAggregate";
+import {createEvent, createMoneyDepositedEvent, eventbus} from "../../dup/event/eventbus";
 
-export class BankaccountAggregate extends Aggregate {
+@aggregate
+export class BankAccountAggregate extends BaseAggregate {
     private bankAccountId: string | null = null;
     private balance = 0;
 
