@@ -1,11 +1,17 @@
-import {CreateBankAccountCommand} from "./domain/commands";
-import commandBus from './domain/CommandBus'
+import {CommandProcessor} from "./dup/CommandProcessor";
+import {EventProcessor} from "./dup/EventProcessor";
+import {commandbus, createBankAccountCommand, depositMoneyCommand} from "./dup/commandbus";
 
+//making the handler listen
+const commandProcessor = new CommandProcessor();
+commandProcessor.listen();
+const eventProcessor = new EventProcessor();
+eventProcessor.listen();
 
-// @ts-ignore
-const work = async () => {
-    const command = new CreateBankAccountCommand("bankAccountId")
-    commandBus.send(command)
-}
+//entrypoint API
+commandbus.publish(createBankAccountCommand({id: "123456789"}));
+commandbus.publish(depositMoneyCommand({id: "123456789",amount:10.00}));
 
-work()
+//unsubscribing
+commandProcessor.unlisten();
+eventProcessor.unlisten();

@@ -1,1 +1,8 @@
 yarn-error.log
+
+*.iml
+
+.idea/**
+
+node_modules
+/cicd/postgres-data/
