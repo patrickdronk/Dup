@@ -1,4 +1,4 @@
-import {Event} from "../../dup/event";
+import {Event} from "../../dup/event/event";
 
 export class BankAccountCreatedEvent implements Event {
     id: string;

@@ -1,14 +1,12 @@
-import {Command} from "../../dup/command";
+import {ICommand} from "../../dup/command/command";
 
-export class CreateBankAccountCommand implements Command {
-    aggregateIdentifier: string;
-
-    constructor(aggregateIdentifier: string) {
+export class CreateBankAccountCommand implements ICommand {
+    constructor(public aggregateIdentifier: string) {
         this.aggregateIdentifier = aggregateIdentifier;
     }
 }
 
-export class DepositCommand implements Command {
+export class DepositCommand implements ICommand {
     aggregateIdentifier: string;
     amount: number;
 
@@ -18,7 +16,7 @@ export class DepositCommand implements Command {
     }
 }
 
-export class WithdrawalCommand implements Command {
+export class WithdrawalCommand implements ICommand {
     aggregateIdentifier: string;
     amount: number
 
