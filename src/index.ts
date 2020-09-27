@@ -14,8 +14,9 @@ const work = async () => {
     // await sleep(200)
     // commandBus.publish(new DepositCommand(bankAccountId, 10));
     // await sleep(200)
-    commandBus.publish(new WithdrawalCommand(bankAccountId, 10));
+    commandBus.publish(new WithdrawalCommand(bankAccountId, 1));
     await sleep(200)
+
 }
 const sleep = (milliseconds: number) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))

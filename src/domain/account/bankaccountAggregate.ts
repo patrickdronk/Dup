@@ -1,4 +1,4 @@
-import {Aggregate, CommandHandler, EventHandler} from "../../dup/decorators";
+import {CommandHandler, EventHandler} from "../../dup/decorators";
 import {CreateBankAccountCommand, DepositCommand, WithdrawalCommand} from "./commands";
 import {BankAccountCreatedEvent, MoneyDepositedEvent, MoneyWithdrewEvent} from "./events";
 import {Aggregate} from "../../dup/aggregate";
