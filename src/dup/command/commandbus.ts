@@ -1,5 +1,4 @@
 import {createEventDefinition, EventBus as InternalEventBus} from "ts-bus";
-import {Event} from "../event/event";
 import {ICommand} from "./command";
 
 class CommandBus {

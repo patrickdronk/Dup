@@ -1,33 +1,27 @@
-import {events} from './tables';
+import db from "../../db";
+
+interface DomainEvent {
+    eventIdentifier: string
+    aggregateIdentifier: string
+    eventSequenceNumber: string
+    payload: string
+    payloadType: string
+}
 
 class EventRepository {
-  getAllDomainEventsByAggregateId(aggregateId: string) {
-    return prisma.domain_event.findMany({
-      where: {
-        aggregateidentifier: aggregateId,
-      },
-    });
-  }
-
-  getMaxEventSequenceNumberForAggregate(aggregateId: string): Promise<number> {
-    const query = `SELECT 0+max(eventsequencenumber)+1
-                        FROM domain_event
-                        WHERE aggregateidentifier = '${aggregateId}'`;
-    return prisma.$executeRaw(query);
-  }
-
-  async save(event: domain_event) {
-    try {
-      await prisma.domain_event.create({
-        data: {
-          ...event,
-          eventsequencenumber: await this.getMaxEventSequenceNumberForAggregate(event.aggregateidentifier),
-        },
-      });
-    } catch (e) {
-      console.log(e.toString());
+    async getAllDomainEventsByAggregateId(aggregateId: string): Promise<DomainEvent[]> {
+        return db.select(db.events.eventIdentifier, db.events.aggregateIdentifier, db.events.eventSequenceNumber, db.events.payload, db.events.payloadType)
+            .from(db.events)
+            .where(db.events.aggregateIdentifier.eq(aggregateId))
     }
-  }
+
+    getMaxEventSequenceNumberForAggregate(aggregateId: string): any {
+        //ToDo
+    }
+
+    async save(event: any) {
+        //ToDo
+    }
 }
 
 const eventRepository = new EventRepository();
