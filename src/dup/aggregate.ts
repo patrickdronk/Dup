@@ -5,12 +5,11 @@ import dayjs = require("dayjs");
 export abstract class Aggregate {
   async apply(event: any): Promise<void> {
     await eventRepository.save({
-      event_identifier: v4(),
-      aggregate_identifier: event.id,
-      aggregate_type: 'BankaccountAggregate',
-      event_sequence_number: 1, // fixme
+      eventIdentifier: v4(),
+      aggregateIdentifier: event.id,
+      eventSequenceNumber: 1, // fixme
       payload: JSON.stringify(event),
-      payload_type: event.constructor.name,
+      payloadType: event.constructor.name,
       timestamp: dayjs().toISOString(),
     });
   }
@@ -31,7 +30,7 @@ export abstract class Aggregate {
       }, {});
 
     events.forEach((event: any) => {
-      const methodName = map[event.payload_type];
+      const methodName = map[event.payloadType];
       // @ts-ignore
       this[methodName](JSON.parse(event.payload));
     });

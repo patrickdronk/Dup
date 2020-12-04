@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import {
-  defineDb, bigint, defineTable, text, uuid,
+  defineDb, bigint, defineTable, text, uuid, date,
 } from '@ff00ff/mammoth';
 
 const events = defineTable({
@@ -9,6 +9,7 @@ const events = defineTable({
   eventSequenceNumber: bigint().notNull(),
   payload: text().notNull(),
   payloadType: text().notNull(),
+  timestamp: date().notNull()
 });
 
 const pool = new Pool({

@@ -20,7 +20,8 @@ class EventRepository {
     }
 
     async save(event: any) {
-        //ToDo
+        const result = await db.insertInto(db.events).values(event)
+        // validate success todo
     }
 }
 
