@@ -15,8 +15,13 @@ class EventRepository {
             .where(db.events.aggregateIdentifier.eq(aggregateId))
     }
 
-    getMaxEventSequenceNumberForAggregate(aggregateId: string): any {
-        //ToDo
+    async getMaxEventSequenceNumberForAggregate(aggregateId: string): Promise<any> {
+        const result = await db.select(db.events.eventSequenceNumber)
+            .from(db.events)
+            .where(db.events.aggregateIdentifier.eq(aggregateId))
+            .orderBy(db.events.eventSequenceNumber.desc())
+            .limit(1);
+        return result[0].eventSequenceNumber
     }
 
     async save(event: any) {

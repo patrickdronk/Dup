@@ -7,7 +7,7 @@ export abstract class Aggregate {
     await eventRepository.save({
       eventIdentifier: v4(),
       aggregateIdentifier: event.id,
-      eventSequenceNumber: 1, // fixme
+      eventSequenceNumber: Number(await eventRepository.getMaxEventSequenceNumberForAggregate(event.id)) + 1,
       payload: JSON.stringify(event),
       payloadType: event.constructor.name,
       timestamp: dayjs().toISOString(),
