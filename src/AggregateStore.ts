@@ -1,6 +1,7 @@
-import {BankaccountAggregate} from "./domain/account/bankaccountAggregate";
+import {BankAccountAggregate} from './domain/account/BankAccountAggregate';
 
-export const AggregateStore: any = {
-    BankaccountAggregate,
-}
+const aggregateStore: any = {
+  BankAccountAggregate,
+};
 
+export default aggregateStore;
