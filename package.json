@@ -5,8 +5,6 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "prebuild": "rm -rf .build && rm -rf coverage",
-    "build": "tsc",
     "pretest": "eslint --ignore-path .gitignore . --fix"
   },
   "husky": {
@@ -15,18 +13,19 @@
     }
   },
   "devDependencies": {
-    "@ff00ff/mammoth-cli": "^1.0.0-beta.1",
     "@types/node": "^14.11.1",
     "@types/pg": "^7.14.5",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
     "husky": "^4.3.0",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.62",
     "typescript": "^4.0.3"
   },
   "dependencies": {
-    "@ff00ff/mammoth": "^1.1.0",
     "@prisma/cli": "2.7.1",
     "@prisma/client": "^2.7.1",
     "@types/reflect-metadata": "^0.1.0",
