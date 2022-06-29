@@ -10,11 +10,11 @@ const work = async () => {
     commandProcessor.listen();
 
     // entrypoint API
-    // commandBus.publish(new CreateBankAccountCommand(bankAccountId));
+    commandBus.publish(new CreateBankAccountCommand(bankAccountId));
     // await sleep(200)
     // commandBus.publish(new DepositCommand(bankAccountId, 10));
     // await sleep(200)
-    commandBus.publish(new WithdrawalCommand(bankAccountId, 1));
+    // commandBus.publish(new WithdrawalCommand(bankAccountId, 1));
     await sleep(200)
 
 }

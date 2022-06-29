@@ -4,36 +4,26 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "pretest": "eslint --ignore-path .gitignore . --fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn pretest"
-    }
+    "start": "ts-node-dev --respawn --transpile-only src/index.ts"
   },
   "devDependencies": {
-    "@types/node": "^14.11.1",
-    "@types/pg": "^7.14.5",
-    "@typescript-eslint/eslint-plugin": "^4.2.0",
-    "@typescript-eslint/parser": "^4.2.0",
-    "eslint": "^7.9.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.0",
-    "husky": "^4.3.0",
-    "ts-node": "^9.0.0",
-    "ts-node-dev": "^1.0.0-pre.62",
-    "typescript": "^4.0.3"
+    "@types/node": "^18.0.0",
+    "prisma": "^4.0.0",
+    "to": "^0.2.9",
+    "ts-node": "^10.8.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.7.4",
+    "update": "^0.7.4"
   },
   "dependencies": {
     "@prisma/cli": "2.7.1",
-    "@prisma/client": "^2.7.1",
+    "@prisma/client": "^3.15.2",
     "@types/reflect-metadata": "^0.1.0",
-    "dayjs": "^1.8.36",
-    "pg": "^8.3.3",
+    "dayjs": "^1.11.3",
+    "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "ts-bus": "^2.3.1",
-    "uuid": "^8.3.0",
-    "uuidv4": "^6.2.3"
+    "uuid": "^8.3.2",
+    "uuidv4": "^6.2.13"
   }
 }

@@ -9,12 +9,12 @@ export class CommandProcessor {
         Object.getOwnPropertyNames(AggregateStore)
             .forEach((aggregateKey: string) => {
                 const aggregate = new AggregateStore[aggregateKey]
-                const commands = Reflect.getMetadataKeys(aggregate)
+                const commandHandlers = Reflect.getMetadataKeys(aggregate)
                     .filter((metaDataKeys: string) => {
                         return metaDataKeys.startsWith("CommandHandler:")
                     })
 
-                commands.forEach((commandKey) => {
+                commandHandlers.forEach((commandKey) => {
                     commandBus.subscribe(commandKey.replace("CommandHandler:", ""), async (event: any) => {
                         const command: ICommand = event.payload
                         let rebuildAggregate = await CommandProcessor.rebuildAggregate(command.aggregateIdentifier, aggregate);

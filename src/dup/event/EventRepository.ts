@@ -12,10 +12,12 @@ class EventRepository {
     }
 
     getMaxEventSequenceNumberForAggregate(aggregateId: string): Promise<number> {
-        const query = `SELECT 0+max(eventsequencenumber)+1
-                        FROM domain_event
-                        WHERE aggregateidentifier = '${aggregateId}'`;
-        return prisma.$executeRaw(query)
+        console.log(aggregateId)
+        return prisma.$executeRaw`
+            SELECT 0 + max(eventsequencenumber) + 1
+            FROM domain_event
+            WHERE aggregateidentifier = ${aggregateId}
+        `
     }
 
     async save(event: domain_event) {
