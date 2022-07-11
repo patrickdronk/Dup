@@ -6,4 +6,4 @@ yarn-error.log
 .vscode
 
 node_modules
-/cicd/postgres-data/
+./postgres-data/
