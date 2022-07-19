@@ -1,10 +1,8 @@
 import "reflect-metadata";
-import {Aggregate} from "./aggregate";
-import aggregateStore from "../AggregateStore";
+import {aggregateStore} from "../AggregateStore";
 
 export function Aggregate(target: any) {
     return (target: any) => {
-        console.log('added to store')
         aggregateStore.addToStore(target)
     }
 }

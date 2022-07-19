@@ -3,6 +3,9 @@ import {domain_event, PrismaClient} from '@prisma/client'
 const prisma = new PrismaClient()
 
 class EventRepository {
+    async getAllEvents(): Promise<domain_event[]> {
+        return await prisma.domain_event.findMany({})
+    }
     getAllDomainEventsByAggregateId(aggregateId: string) {
         return prisma.domain_event.findMany({
             where: {
@@ -29,7 +32,7 @@ class EventRepository {
                 }
             });
         } catch (e) {
-            console.log(e.toString())
+            console.log(e)
         }
     }
 }

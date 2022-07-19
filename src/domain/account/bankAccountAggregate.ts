@@ -3,13 +3,14 @@ import {CreateBankAccountCommand, DepositCommand, WithdrawalCommand} from "./com
 import {BankAccountCreatedEvent, MoneyDepositedEvent, MoneyWithdrewEvent} from "./events";
 import {Aggregate} from "../../dup/aggregate";
 
-export class BankaccountAggregate extends Aggregate {
+export class BankAccountAggregate extends Aggregate {
     private bankAccountId: string | undefined;
     private balance = 0;
 
     //region commandHandlers
     @CommandHandler
     async handle(command: CreateBankAccountCommand) {
+        console.log("here?");
         const event = new BankAccountCreatedEvent(command.aggregateIdentifier);
         await this.apply(event);
     }
@@ -22,7 +23,6 @@ export class BankaccountAggregate extends Aggregate {
 
     @CommandHandler
     async handleWithdrawal(command: WithdrawalCommand) {
-        console.log(this.balance)
         if (this.isBalanceSufficient(command.amount)) {
             await this.apply(new MoneyWithdrewEvent(command.aggregateIdentifier, command.amount))
         } else {

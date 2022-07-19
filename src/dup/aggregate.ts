@@ -4,12 +4,14 @@ import dayjs = require("dayjs");
 import {domain_event} from "@prisma/client";
 
 export abstract class Aggregate {
+    private eventsequencenumber = 0
+
     async apply(event: any): Promise<void> {
         await eventRepository.save({
             eventidentifier: v4(),
             aggregateidentifier: event.id,
             aggregate_type: "BankaccountAggregate",
-            eventsequencenumber: 1, // fixme
+            eventsequencenumber: this.eventsequencenumber,
             payload: JSON.stringify(event),
             payload_type: event.constructor.name,
             timestamp: dayjs().toISOString()
@@ -37,5 +39,12 @@ export abstract class Aggregate {
             //@ts-ignore
             this[methodName](JSON.parse(event.payload))
         })
+
+        const lastEvent = events[events.length - 1];
+
+        if(lastEvent) {
+            this.eventsequencenumber = lastEvent.eventsequencenumber + 1;
+        }
+
     }
 }

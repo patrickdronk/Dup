@@ -2,13 +2,13 @@ import eventRepository from "../event/EventRepository";
 import {Aggregate} from "../aggregate";
 import commandBus from "./commandbus";
 import {ICommand} from "./command";
-import {AggregateStore} from "../../AggregateStore";
+import {aggregateStore} from "../../AggregateStore";
 
 export class CommandProcessor {
     listen(): void {
-        Object.getOwnPropertyNames(AggregateStore)
+        Object.getOwnPropertyNames(aggregateStore)
             .forEach((aggregateKey: string) => {
-                const aggregate = new AggregateStore[aggregateKey]
+                const aggregate = new aggregateStore[aggregateKey]
                 const commandHandlers = Reflect.getMetadataKeys(aggregate)
                     .filter((metaDataKeys: string) => {
                         return metaDataKeys.startsWith("CommandHandler:")
