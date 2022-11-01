@@ -1,8 +1,8 @@
 import {App, Stack, StackProps} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
-import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
+// import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import * as events from "aws-cdk-lib/aws-events"
-import * as targets from "aws-cdk-lib/aws-events-targets"
+// import * as targets from "aws-cdk-lib/aws-events-targets"
 import {CfnEventBusPolicy, EventBus} from "aws-cdk-lib/aws-events";
 
 export class MyStack extends Stack {
