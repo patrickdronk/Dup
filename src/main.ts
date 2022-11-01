@@ -55,6 +55,7 @@ export class MyStack extends Stack {
       entry: 'src/index.ts',
       handler: 'work',
       bundling: {
+        forceDockerBundling: true,
         preCompilation: true,
         commandHooks: {
           beforeInstall(_inputDir: string, _outputDir: string): string[] {
