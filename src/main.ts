@@ -25,7 +25,7 @@ export class MyStack extends Stack {
           eventPattern: {
               detailType: ["dup-event-bus"]
           },
-          targets: [cooleLambdaTarget]
+          targets: []
       });
 
 
