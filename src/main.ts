@@ -13,12 +13,12 @@ export class MyStack extends Stack {
           eventBusName: "dup-event-bus"
       });
 
-      const cooleLambda = new NodejsFunction(this, 'MyFunction', {
-          entry: 'src/app/test.ts',
-          handler: 'handler',
-      });
-
-      const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda)
+      // const cooleLambda = new NodejsFunction(this, 'MyFunction', {
+      //     entry: 'src/app/test.ts',
+      //     handler: 'handler',
+      // });
+      //
+      // const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda)
 
       new events.Rule(this, "fiveMinuteRule", {
           eventBus: customEventBus,
