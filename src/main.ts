@@ -1,21 +1,33 @@
 import {App, Stack, StackProps} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
-//import * as events from "aws-cdk-lib/aws-events"
+import * as events from "aws-cdk-lib/aws-events"
+import * as targets from "aws-cdk-lib/aws-events-targets"
 import {CfnEventBusPolicy, EventBus} from "aws-cdk-lib/aws-events";
 
 export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id, props);
 
-    new NodejsFunction(this, 'MyFunction', {
-      entry: 'src/app/test.ts',
-      handler: 'handler',
-    });
+      const customEventBus = new EventBus(this, "CustomEventBus", {
+          eventBusName: "dup-event-bus"
+      });
 
-    const customEventBus = new EventBus(this, "CustomEventBus", {
-      eventBusName: "dup-event-bus"
-    });
+      const cooleLambda = new NodejsFunction(this, 'MyFunction', {
+          entry: 'src/app/test.ts',
+          handler: 'handler',
+      });
+
+      const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda)
+
+      new events.Rule(this, "fiveMinuteRule", {
+          eventBus: customEventBus,
+          eventPattern: {
+              detailType: ["dup-event-bus"]
+          },
+          targets: [cooleLambdaTarget]
+      });
+
 
     //Adding a resource based policy to custom event bus
     new CfnEventBusPolicy(this,"EventBusResourcePolicy", {
@@ -39,12 +51,11 @@ export class MyStack extends Stack {
             }
           }
     });
-    
+
+    // ARN = arn:aws:events:eu-west-1:051155894342:event-bus/dup-event-bus
 
     /*
-    new events.Rule(this, "fiveMinuteRule", {
-      schedule: events.Schedule.cron({ minute: "0/5" }),
-    });
+
 
      */
   }
