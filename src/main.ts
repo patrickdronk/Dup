@@ -1,8 +1,10 @@
 import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 // import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import * as events from 'aws-cdk-lib/aws-events';
 // import * as targets from "aws-cdk-lib/aws-events-targets"
-import { CfnEventBusPolicy, EventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus } from 'aws-cdk-lib/aws-events';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 
 export class MyStack extends Stack {
