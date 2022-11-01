@@ -11,6 +11,6 @@ export class MyStack extends Stack {
 
 const app = new App();
 
-new MyStack(app, 'Dup-dev', {  });
+new MyStack(app, 'Dup-dev', { });
 
 app.synth();
