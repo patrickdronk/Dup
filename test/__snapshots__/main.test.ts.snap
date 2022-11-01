@@ -9,6 +9,60 @@ exports[`Snapshot 1`] = `
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
+  "Resources": {
+    "CustomEventBusEC0C3CB8": {
+      "Properties": {
+        "Name": "dup-event-bus",
+      },
+      "Type": "AWS::Events::EventBus",
+    },
+    "EventBusResourcePolicy": {
+      "Properties": {
+        "EventBusName": {
+          "Ref": "CustomEventBusEC0C3CB8",
+        },
+        "Statement": {
+          "Action": [
+            "events:PutEvents",
+          ],
+          "Condition": {
+            "StringEquals": {
+              "events:detail-type": "dup-event-bus",
+              "events:source": "com.vikkie.dup",
+            },
+          },
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": {
+              "Ref": "AWS::AccountId",
+            },
+          },
+          "Resource": {
+            "Fn::GetAtt": [
+              "CustomEventBusEC0C3CB8",
+              "Arn",
+            ],
+          },
+        },
+        "StatementId": "CustomerSubscriptionSid",
+      },
+      "Type": "AWS::Events::EventBusPolicy",
+    },
+    "fiveMinuteRule3418C463": {
+      "Properties": {
+        "EventBusName": {
+          "Ref": "CustomEventBusEC0C3CB8",
+        },
+        "EventPattern": {
+          "detail-type": [
+            "dup-event-bus",
+          ],
+        },
+        "State": "ENABLED",
+      },
+      "Type": "AWS::Events::Rule",
+    },
+  },
   "Rules": {
     "CheckBootstrapVersion": {
       "Assertions": [
