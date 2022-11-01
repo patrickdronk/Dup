@@ -45,6 +45,9 @@ export class MyStack extends Stack {
     const dup = new NodejsFunction(this, 'dup-temp-runner', {
       entry: 'src/index.ts',
       handler: 'work',
+      bundling: {
+        preCompilation: true,
+      }
     });
 
     table.grantReadWriteData(dup);
