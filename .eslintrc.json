@@ -145,7 +145,8 @@
       {
         "devDependencies": [
           "**/test/**",
-          "**/build-tools/**"
+          "**/build-tools/**",
+          "src/app/test.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true
