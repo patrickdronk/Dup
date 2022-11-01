@@ -50,5 +50,4 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
-!/src/app/test-function.ts
 !/.github/workflows/deploy.yml

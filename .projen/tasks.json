@@ -26,30 +26,7 @@
     },
     "bundle": {
       "name": "bundle",
-      "description": "Prepare assets",
-      "steps": [
-        {
-          "spawn": "bundle:app/test.lambda"
-        }
-      ]
-    },
-    "bundle:app/test.lambda": {
-      "name": "bundle:app/test.lambda",
-      "description": "Create a JavaScript bundle from src/app/test.lambda.ts",
-      "steps": [
-        {
-          "exec": "esbuild --bundle src/app/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/app/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
-        }
-      ]
-    },
-    "bundle:app/test.lambda:watch": {
-      "name": "bundle:app/test.lambda:watch",
-      "description": "Continuously update the JavaScript bundle from src/app/test.lambda.ts",
-      "steps": [
-        {
-          "exec": "esbuild --bundle src/app/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/app/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
-        }
-      ]
+      "description": "Prepare assets"
     },
     "clobber": {
       "name": "clobber",

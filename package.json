@@ -3,8 +3,6 @@
   "scripts": {
     "build": "npx projen build",
     "bundle": "npx projen bundle",
-    "bundle:app/test.lambda": "npx projen bundle:app/test.lambda",
-    "bundle:app/test.lambda:watch": "npx projen bundle:app/test.lambda:watch",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",

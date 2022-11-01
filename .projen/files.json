@@ -15,7 +15,6 @@
     ".projen/tasks.json",
     "cdk.json",
     "LICENSE",
-    "src/app/test-function.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],
