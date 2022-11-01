@@ -6,12 +6,23 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     name: 'Dup',
     dependabot: true,
     lambdaAutoDiscover: true,
-
-    // deps: [],                /* Runtime dependencies of this module. */
+    deps: [
+        "reflect-metadata",
+        "@aws-sdk/lib-dynamodb",
+        "@aws-sdk/client-dynamodb",
+        "dayjs",
+        "uuidv4"
+    ],
+    devDeps: [
+        "@types/reflect-metadata"
+    ]
     // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
     // devDeps: [],             /* Build dependencies for this module. */
     // packageName: undefined,  /* The "name" in package.json. */
 });
+
+project.tsconfig.compilerOptions.experimentalDecorators = true;
+project.tsconfig.compilerOptions.emitDecoratorMetadata = true;
 
 project.cdkTasks.deploy.reset('npx cdk deploy --require-approval never');
 
