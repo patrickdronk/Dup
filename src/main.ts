@@ -39,11 +39,7 @@ export class MyStack extends Stack {
             }
           }
     });
-
-
-
-    const arn = "arn:aws:events:eu-west-1:051155894342:event-bus/projection-bus";
-
+    
 
     /*
     new events.Rule(this, "fiveMinuteRule", {
