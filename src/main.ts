@@ -14,7 +14,7 @@ export class MyStack extends Stack {
     });
 
     const customEventBus = new EventBus(this, "CustomEventBus", {
-      eventBusName: "customer-subscription-bus"
+      eventBusName: "projection-bus"
     });
 
     //Adding a resource based policy to custom event bus
@@ -33,8 +33,8 @@ export class MyStack extends Stack {
             "Resource": customEventBus.eventBusArn,
             "Condition": {
               "StringEquals": {
-                "events:detail-type": "customer-subscription",
-                "events:source": "com.duleendra.customerapp"
+                "events:detail-type": "projection-bus",
+                "events:source": "com.vikkie.dup"
               }
             }
           }
