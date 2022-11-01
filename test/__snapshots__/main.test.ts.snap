@@ -16,37 +16,166 @@ exports[`Snapshot 1`] = `
       },
       "Type": "AWS::Events::EventBus",
     },
-    "EventBusResourcePolicy": {
+    "duptemprunner6B70311F": {
+      "DependsOn": [
+        "duptemprunnerServiceRoleDefaultPolicy963D2E33",
+        "duptemprunnerServiceRoleBBC79718",
+      ],
       "Properties": {
-        "EventBusName": {
-          "Ref": "CustomEventBusEC0C3CB8",
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "f83a09e2e626dec9349e1d6a31b44f0e48a556fd883caf27209d3207d5384cdf.zip",
         },
-        "Statement": {
-          "Action": [
-            "events:PutEvents",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.work",
+        "Role": {
+          "Fn::GetAtt": [
+            "duptemprunnerServiceRoleBBC79718",
+            "Arn",
           ],
-          "Condition": {
-            "StringEquals": {
-              "events:detail-type": "dup-event-bus",
-              "events:source": "com.vikkie.dup",
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "duptemprunnerServiceRoleBBC79718": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
             },
-          },
-          "Effect": "Allow",
-          "Principal": {
-            "AWS": {
-              "Ref": "AWS::AccountId",
-            },
-          },
-          "Resource": {
-            "Fn::GetAtt": [
-              "CustomEventBusEC0C3CB8",
-              "Arn",
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
             ],
           },
-        },
-        "StatementId": "CustomerSubscriptionSid",
+        ],
       },
-      "Type": "AWS::Events::EventBusPolicy",
+      "Type": "AWS::IAM::Role",
+    },
+    "duptemprunnerServiceRoleDefaultPolicy963D2E33": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "eventsDBF2F82B40",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "eventsDBF2F82B40",
+                          "Arn",
+                        ],
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "duptemprunnerServiceRoleDefaultPolicy963D2E33",
+        "Roles": [
+          {
+            "Ref": "duptemprunnerServiceRoleBBC79718",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "eventsDBF2F82B40": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "eventId",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "timestamp",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "aggregateId",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "aggregateIdIdx",
+            "KeySchema": [
+              {
+                "AttributeName": "aggregateId",
+                "KeyType": "HASH",
+              },
+            ],
+            "Projection": {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "eventId",
+            "KeyType": "HASH",
+          },
+          {
+            "AttributeName": "timestamp",
+            "KeyType": "RANGE",
+          },
+        ],
+        "TableName": "events",
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
     },
     "fiveMinuteRule3418C463": {
       "Properties": {
