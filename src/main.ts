@@ -1,7 +1,7 @@
 import {App, Stack, StackProps} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
-import * as events from "aws-cdk-lib/aws-events"
+//import * as events from "aws-cdk-lib/aws-events"
 import {CfnEventBusPolicy, EventBus} from "aws-cdk-lib/aws-events";
 
 export class MyStack extends Stack {
@@ -44,7 +44,7 @@ export class MyStack extends Stack {
     new events.Rule(this, "fiveMinuteRule", {
       schedule: events.Schedule.cron({ minute: "0/5" }),
     });
-    
+
      */
   }
 }
