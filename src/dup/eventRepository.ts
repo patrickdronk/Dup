@@ -23,7 +23,7 @@ export const save = async (event: DomainEvent) => {
   }
 };
 
-export const getAllDomainEventsByAggregateId = async (aggregateId: string) => {
+export const getAllDomainEventsByAggregateId = async(aggregateId: string) => {
   const queryCommand = new QueryCommand({
     TableName: 'events',
     IndexName: 'aggregateIdIdx',

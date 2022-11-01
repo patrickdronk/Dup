@@ -1,12 +1,11 @@
 import { App, Stack, StackProps } from 'aws-cdk-lib';
-// import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+// import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import * as events from 'aws-cdk-lib/aws-events';
+// import * as targets from "aws-cdk-lib/aws-events-targets"
 import { EventBus } from 'aws-cdk-lib/aws-events';
-// import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-
 
 export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -17,8 +16,8 @@ export class MyStack extends Stack {
     });
 
     // const cooleLambda = new NodejsFunction(this, 'MyFunction', {
-    //   entry: 'src/app/test.ts',
-    //   handler: 'handler',
+    //     entry: 'src/app/test.ts',
+    //     handler: 'handler',
     // });
     //
     // const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda);
