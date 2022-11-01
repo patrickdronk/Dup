@@ -21,7 +21,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   // packageName: undefined,  /* The "name" in package.json. */
   gitignore: [
     '.idea/',
-    '.db-files/'
+    '.db-files/',
   ],
 });
 
