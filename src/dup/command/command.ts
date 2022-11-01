@@ -1,3 +1,3 @@
 export interface ICommand {
-    aggregateId: string
+  aggregateId: string;
 }
