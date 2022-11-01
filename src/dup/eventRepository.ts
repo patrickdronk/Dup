@@ -2,9 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { DomainEvent } from './event/event';
 
-const client = new DynamoDBClient({
-  region: 'eu-west-1',
-});
+const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
 
 export const save = async (event: DomainEvent) => {

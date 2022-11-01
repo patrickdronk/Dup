@@ -18,7 +18,7 @@ export class MyStack extends Stack {
     //     handler: 'handler',
     // });
     //
-    // const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda)
+    // const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda);
 
     new events.Rule(this, 'fiveMinuteRule', {
       eventBus: customEventBus,
@@ -28,36 +28,24 @@ export class MyStack extends Stack {
       targets: [],
     });
 
-
-    //Adding a resource based policy to custom event bus
-    new CfnEventBusPolicy(this, 'EventBusResourcePolicy', {
-      statementId: 'CustomerSubscriptionSid',
-      eventBusName: customEventBus.eventBusName,
-      statement:
-          {
-            Effect: 'Allow',
-            Action: [
-              'events:PutEvents',
-            ],
-            Principal: {
-              AWS: this.account,
-            },
-            Resource: customEventBus.eventBusArn,
-            Condition: {
-              StringEquals: {
-                'events:detail-type': 'dup-event-bus',
-                'events:source': 'com.vikkie.dup',
-              },
-            },
-          },
+    const table = new Table(this, 'eventsDB', {
+      tableName: 'events',
+      partitionKey: { name: 'eventId', type: AttributeType.STRING },
+      sortKey: { name: 'timestamp', type: AttributeType.STRING },
+      billingMode: BillingMode.PAY_PER_REQUEST,
     });
 
-    // ARN = arn:aws:events:eu-west-1:051155894342:event-bus/dup-event-bus
+    table.addGlobalSecondaryIndex({
+      indexName: 'aggregateIdIdx',
+      partitionKey: { name: 'aggregateId', type: AttributeType.STRING },
+    });
 
-    /*
+    const dup = new NodejsFunction(this, 'dup-temp-runner', {
+      entry: 'src/index.ts',
+      handler: 'work',
+    });
 
-
-     */
+    table.grantReadWriteData(dup);
   }
 }
 
