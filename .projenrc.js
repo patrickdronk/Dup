@@ -27,6 +27,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 
 project.tsconfig.compilerOptions.experimentalDecorators = true;
 project.tsconfig.compilerOptions.emitDecoratorMetadata = true;
+project.tsconfig.compilerOptions.lib = ['es2019', 'dom'];
 
 project.cdkTasks.deploy.reset('npx cdk deploy --require-approval never');
 
