@@ -13,6 +13,8 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     // packageName: undefined,  /* The "name" in package.json. */
 });
 
+project.cdkTasks.deploy.reset('npx cdk deploy --require-approval never');
+
 const pro = project.github.addWorkflow('deploy');
 pro.on({workflowDispatch: {}});
 pro.addJob('deploy', {
