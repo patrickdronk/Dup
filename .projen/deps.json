@@ -10,6 +10,10 @@
       "type": "build"
     },
     {
+      "name": "@types/reflect-metadata",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -85,6 +89,14 @@
       "type": "override"
     },
     {
+      "name": "@aws-sdk/client-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.1.0",
       "type": "runtime"
@@ -92,6 +104,18 @@
     {
       "name": "constructs",
       "version": "^10.0.5",
+      "type": "runtime"
+    },
+    {
+      "name": "dayjs",
+      "type": "runtime"
+    },
+    {
+      "name": "reflect-metadata",
+      "type": "runtime"
+    },
+    {
+      "name": "uuidv4",
       "type": "runtime"
     }
   ],
