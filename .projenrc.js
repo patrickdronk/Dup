@@ -27,6 +27,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 
 project.tsconfig.compilerOptions.experimentalDecorators = true;
 project.tsconfig.compilerOptions.emitDecoratorMetadata = true;
+//fixme https://stackoverflow.com/questions/66275648/aws-javascript-sdk-v3-typescript-doesnt-compile-due-to-error-ts2304-cannot-f
 project.tsconfig.compilerOptions.lib = ['es2019', 'dom'];
 
 project.cdkTasks.deploy.reset('npx cdk deploy --require-approval never');

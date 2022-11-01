@@ -32,14 +32,23 @@ export class MyStack extends Stack {
 
     const table = new Table(this, 'eventsDB', {
       tableName: 'events',
-      partitionKey: { name: 'eventId', type: AttributeType.STRING },
-      sortKey: { name: 'timestamp', type: AttributeType.STRING },
+      partitionKey: {
+        name: 'eventId',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'timestamp',
+        type: AttributeType.STRING,
+      },
       billingMode: BillingMode.PAY_PER_REQUEST,
     });
 
     table.addGlobalSecondaryIndex({
       indexName: 'aggregateIdIdx',
-      partitionKey: { name: 'aggregateId', type: AttributeType.STRING },
+      partitionKey: {
+        name: 'aggregateId',
+        type: AttributeType.STRING,
+      },
     });
 
     const dup = new NodejsFunction(this, 'dup-temp-runner', {
@@ -47,7 +56,19 @@ export class MyStack extends Stack {
       handler: 'work',
       bundling: {
         preCompilation: true,
-      }
+        commandHooks: {
+          beforeInstall(_inputDir: string, _outputDir: string): string[] {
+            return [];
+          },
+          beforeBundling(_inputDir: string, _outputDir: string): string[] {
+            return ['tsc'];
+          },
+          afterBundling(_inputDir: string, _outputDir: string): string[] {
+            return [];
+          },
+
+        },
+      },
     });
 
     table.grantReadWriteData(dup);
