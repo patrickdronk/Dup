@@ -14,7 +14,7 @@ export class MyStack extends Stack {
     });
 
     const customEventBus = new EventBus(this, "CustomEventBus", {
-      eventBusName: "projection-bus"
+      eventBusName: "dup-event-bus"
     });
 
     //Adding a resource based policy to custom event bus
@@ -33,12 +33,17 @@ export class MyStack extends Stack {
             "Resource": customEventBus.eventBusArn,
             "Condition": {
               "StringEquals": {
-                "events:detail-type": "projection-bus",
+                "events:detail-type": "dup-event-bus",
                 "events:source": "com.vikkie.dup"
               }
             }
           }
     });
+
+
+
+    const arn = "arn:aws:events:eu-west-1:051155894342:event-bus/projection-bus";
+
 
     /*
     new events.Rule(this, "fiveMinuteRule", {
