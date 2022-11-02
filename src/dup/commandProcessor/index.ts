@@ -23,7 +23,7 @@ export class CommandProcessor {
             const methodName = Reflect.getMetadata(commandKey, aggregate);
 
             //@ts-ignore
-            rebuildAggregate[`${methodName}`](command);
+            await rebuildAggregate[`${methodName}`](command);
           });
         });
       });

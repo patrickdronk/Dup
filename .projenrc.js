@@ -12,7 +12,11 @@ const project = new awscdk.AwsCdkTypeScriptApp({
         '@aws-sdk/client-dynamodb',
         'dayjs',
         'uuidv4',
-    ],
+    "graphql",
+    "graphql-yoga@three",
+    "@graphql-yoga/common",
+    "@graphql-yoga/node",
+    "@vendia/serverless-express"],
     devDeps: [
         '@types/reflect-metadata',
         'esbuild-plugin-tsc',

@@ -1,12 +1,8 @@
 import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
-// import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
-import { DockerImageFunction, DockerImageCode } from 'aws-cdk-lib/aws-lambda';
+import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import * as events from 'aws-cdk-lib/aws-events';
-// import * as targets from "aws-cdk-lib/aws-events-targets"
 import { EventBus } from 'aws-cdk-lib/aws-events';
-// import { Code, Function } from 'aws-cdk-lib/aws-lambda';
-// import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import path from 'path';
 import 'reflect-metadata';
@@ -116,14 +112,7 @@ export class MyStack extends Stack {
       code: DockerImageCode.fromImageAsset(dockerFile)
     })
 
-    // const dup = new NodejsFunction(this, 'dup-temp-runner', {
-    //   entry: 'src/index.ts',
-    //   handler: 'work',
-    //   bundling: {
-    //     preCompilation: true,
-    //   },
-    // });
-
+    dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE })
 
     table.grantReadWriteData(dup);
   }

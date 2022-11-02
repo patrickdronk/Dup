@@ -23,7 +23,7 @@ export class CommandBus implements ICommandBus {
     this.subscribers = {};
   }
 
-  public dispatch<T>(event: string, arg?: T): void {
+  public async dispatch<T>(event: string, arg?: T): Promise<void> {
     const subscriber = this.subscribers[event];
     console.log("subscriber:", subscriber)
     console.log("subscribers:", this.subscribers)
@@ -32,7 +32,13 @@ export class CommandBus implements ICommandBus {
       return;
     }
 
-    Object.keys(subscriber).forEach((key) => subscriber[key](arg));
+    try {
+      for (const key of Object.keys(subscriber)) {
+        await subscriber[key](arg);
+      }
+    } catch(err: any) {
+      throw new Error(err.message)
+    }
   }
 
   public register(event: string, callback: Function): Registry {
