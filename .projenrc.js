@@ -34,7 +34,9 @@ project.tsconfig.compilerOptions.lib = ['es2019', 'dom'];
 project.cdkTasks.deploy.reset('npx cdk deploy --require-approval never');
 
 const pro = project.github.addWorkflow('deploy');
-pro.on({ workflowDispatch: {} });
+pro.on({ push: {
+  branches: ['master']
+  } });
 pro.addJob('deploy', {
   name: 'deploy',
   runsOn: 'ubuntu-latest',
