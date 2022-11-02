@@ -3,8 +3,8 @@ export interface IEvent {
 }
 
 export interface DomainEvent {
-  eventIdentifier: string;
-  aggregateIdentifier: string;
+  eventId: string;
+  aggregateId: string;
   aggregateType: string;
   eventSequenceNumber: number;
   payload: string;

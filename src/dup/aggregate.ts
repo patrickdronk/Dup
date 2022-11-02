@@ -6,8 +6,8 @@ import { save } from './eventRepository';
 export abstract class Aggregate {
   async apply(event: IEvent): Promise<void> {
     await save({
-      eventIdentifier: uuid(),
-      aggregateIdentifier: event.aggregateId,
+      eventId: uuid(),
+      aggregateId: event.aggregateId,
       aggregateType: 'BankaccountAggregate', //fixMe
       eventSequenceNumber: 1, //fixMe
       payload: JSON.stringify(event),

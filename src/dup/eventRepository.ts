@@ -9,9 +9,6 @@ export const save = async (event: DomainEvent) => {
   const command = new PutCommand({
     TableName: 'events',
     Item: {
-      primaryKey: event.eventIdentifier,
-      sortKey: event.timestamp,
-      aggregateId: event.aggregateIdentifier,
       ...event,
     },
   });
