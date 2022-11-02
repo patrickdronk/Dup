@@ -11,10 +11,6 @@ export function EventHandler(target: any, name: any, desc: any) {
 }
 
 export function EventProjectionHandler(target: any, name: any, desc: any, EventProjectionHandler: MethodDecorator) {
-  const myTypes = [];
   const idk = Reflect.getMetadata('design:paramtypes', target, name);
-  Reflect.defineMetadata(`EventHandler:${idk[0].name}`, desc.value.name, target);
-
-  myTypes.push(EventProjectionHandler)
-
+  Reflect.defineMetadata(`EventProjectionHandler:${idk[0].name}`, desc.value.name, target);
 }
