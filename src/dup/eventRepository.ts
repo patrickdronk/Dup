@@ -37,7 +37,7 @@ export const getAllDomainEventsByAggregateId = async(aggregateId: string) => {
 
   const sortedItems = items!!.sort(function(a,b){
     // @ts-ignore
-    return new Date(b.timestamp) - new Date(a.timestamp);
+    return new Date(a.timestamp) - new Date(b.timestamp);
   });
 
   return sortedItems as DomainEvent[];
