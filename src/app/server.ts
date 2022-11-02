@@ -11,20 +11,23 @@ const schema = createSchema({
     typeDefs: `
     type Mutation {
       createBankAccount(aggregateId: String): String
-      deposit(aggregateId: String, amount: Number): String
-      withdraw(aggregateId: String, amount: Number): String
+      deposit(aggregateId: String, amount: Int): String
+      withdraw(aggregateId: String, amount: Int): String
     }
   `,
     resolvers: {
         Mutation: {
             createBankAccount: async (aggregateId: string) => {
                 await commandBus.dispatch("CreateBankAccountCommand", new CreateBankAccountCommand(aggregateId))
+                return "OK"
             },
             deposit: async (aggregateId: string, amount: number) => {
                 await commandBus.dispatch("DepositCommand", new DepositCommand(aggregateId, amount))
+                return "OK"
             },
             withdraw: async (aggregateId: string, amount: number) => {
                 await commandBus.dispatch("WithdrawalCommand", new WithdrawalCommand(aggregateId, amount))
+                return "OK"
             }
         }
     }
