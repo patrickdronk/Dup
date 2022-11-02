@@ -17,11 +17,6 @@ const timeout = (ms: number) => {
 };
 
 //fixme
-export const work = async () => {
-  const aggregateId = uuid();
-  commandBus.dispatch('CreateBankAccountCommand', new CreateBankAccountCommand(aggregateId));
-  await timeout(2000);
-  commandBus.dispatch('DepositCommand', new DepositCommand(aggregateId, 50));
-  await timeout(2000);
-  commandBus.dispatch('WithdrawalCommand', new WithdrawalCommand(aggregateId, 20));
+export const work = async (event: any) => {
+  commandBus.dispatch(event.commandName, event.command);
 };
