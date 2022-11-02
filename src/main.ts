@@ -54,7 +54,7 @@ export class MyStack extends Stack {
       },
     });
 
-    const dockerFile = path.join(__dirname, '../Dockerfile')
+    const dockerFile = path.join(__dirname, '../')
 
     const dup = new DockerImageFunction(this, 'dup-docker-runner', {
       code: DockerImageCode.fromImageAsset(dockerFile)
