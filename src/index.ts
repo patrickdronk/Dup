@@ -18,5 +18,7 @@ const timeout = (ms: number) => {
 
 //fixme
 export const work = async (event: any) => {
-  commandBus.dispatch(event.commandName, event.command);
+  console.log("event:", event)
+
+  commandBus.dispatch(event.commandName, new CreateBankAccountCommand(event.command.aggregateId));
 };
