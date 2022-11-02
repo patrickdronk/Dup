@@ -1,4 +1,4 @@
-import { createServer } from '@graphql-yoga/node';
+import { createServer, GraphQLYogaError } from '@graphql-yoga/node';
 import { createSchema } from 'graphql-yoga';
 import { CreateBankAccountCommand, DepositCommand, WithdrawalCommand } from './bankAccount/commands';
 import { CommandBus } from '../dup/bus/command-bus';
@@ -32,8 +32,12 @@ const schema = createSchema({
                 return "OK"
             },
             withdraw: async (_, { aggregateId, amount }) => {
-                await commandBus.dispatch("WithdrawalCommand", new WithdrawalCommand(aggregateId, amount))
-                return "OK"
+                try {
+                    await commandBus.dispatch("WithdrawalCommand", new WithdrawalCommand(aggregateId, amount))
+                    return "OK"
+                } catch(err: any) {
+                    throw new GraphQLYogaError(err.message)
+                }
             }
         }
     }
