@@ -13,8 +13,8 @@ new CommandProcessor(commandBus);
 //fixme
 export const work = async (event: any) => {
   console.log("event:", event)
-
   const command = getCommand(event.commandName, event.command)
+  console.log(command)
   commandBus.dispatch(event.commandName, command);
 };
 
