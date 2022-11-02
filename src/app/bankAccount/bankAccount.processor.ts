@@ -1,4 +1,4 @@
-import { EventProjectionHandler } from '../../dup/decorators';
+import { EventHandler } from '../../dup/decorators';
 
 export const handler(message: EventBridgeMessage) => {
 
@@ -13,7 +13,7 @@ class BankAccountEventProcessor {
     constructor() {
     }
 
-    @EventProjectionHandler
+    @EventHandler
     handle(event: UserCreatedEvent) {
     }
 }

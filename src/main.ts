@@ -9,6 +9,8 @@ import { EventBus } from 'aws-cdk-lib/aws-events';
 // import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import path from 'path';
+import 'reflect-metadata';
+import * as fs from 'fs';
 
 export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -31,6 +33,53 @@ export class MyStack extends Stack {
 
     // Reflection. Test wanneer reflection in de pipeline werkt
     // placeholder
+
+    //const outputvikkie = Reflect.getMetadataKeys(this);
+
+    //console.log(this);
+
+    // todo: make recursive and relative
+    // maybe use const {resolve} = require("path");
+    const processorDir = "/Users/viktorschelling/cc-hackathon-dup/src/app/bankAccount";
+    var files = fs.readdirSync(processorDir).filter(fn => fn.endsWith('.processor.ts'));
+
+    console.log(files);
+
+    files.forEach(function(filename) {
+      console.log(processorDir + filename);
+      fs.readFile(processorDir + '/' + filename, 'utf-8', function(err, filecontent) {
+        if (err) {
+          throw err;
+        }
+        const content = filecontent;
+
+        // Invoke the next step here however you like
+        processFile(content);   // Or put the next step in a function and invoke it
+      });
+
+
+      function processFile(content: string) {
+
+        // Match the first word after "event: " ignoring whitespace and including all new lines, made with autoregen.xyz :-)
+        const regex = /event:\s*\n*\s*(.*)/gm;
+        let m;
+        while ((m = regex.exec(content)) !== null) {
+          // This is necessary to avoid infinite loops with zero-width matches
+          if (m.index === regex.lastIndex) {
+            regex.lastIndex++;
+          }
+
+          // The result can be accessed through the `m`-variable.
+          m.forEach((match, groupIndex) => {
+            console.log(`Found match, group ${groupIndex}: ${match}`);
+          });
+        }
+
+      }
+
+    });
+
+
 
     new events.Rule(this, 'fiveMinuteRule', {
       eventBus: customEventBus,
