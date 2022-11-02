@@ -25,6 +25,13 @@ export class MyStack extends Stack {
     //
     // const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda);
 
+    //VIKTOR --> TODO
+    // zoek in src naar alle files die eindigen op .processor
+    // of gebruik reflectie
+
+    // Reflection. Test wanneer reflection in de pipeline werkt
+    // placeholder
+
     new events.Rule(this, 'fiveMinuteRule', {
       eventBus: customEventBus,
       eventPattern: {
