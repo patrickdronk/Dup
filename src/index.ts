@@ -24,4 +24,5 @@ export const work = async () => {
   commandBus.dispatch('DepositCommand', new DepositCommand(aggregateId, 50));
   await timeout(2000);
   commandBus.dispatch('WithdrawalCommand', new WithdrawalCommand(aggregateId, 20));
+  await timeout(2000);
 };
