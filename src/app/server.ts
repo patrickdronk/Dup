@@ -23,15 +23,15 @@ const schema = createSchema({
             me: () => "hoi"
         },
         Mutation: {
-            createBankAccount: async (aggregateId: string) => {
+            createBankAccount: async (_, { aggregateId }) => {
                 await commandBus.dispatch("CreateBankAccountCommand", new CreateBankAccountCommand(aggregateId))
                 return "OK"
             },
-            deposit: async (aggregateId: string, amount: number) => {
+            deposit: async (_, { aggregateId, amount }) => {
                 await commandBus.dispatch("DepositCommand", new DepositCommand(aggregateId, amount))
                 return "OK"
             },
-            withdraw: async (aggregateId: string, amount: number) => {
+            withdraw: async (_, { aggregateId, amount }) => {
                 await commandBus.dispatch("WithdrawalCommand", new WithdrawalCommand(aggregateId, amount))
                 return "OK"
             }
