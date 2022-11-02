@@ -101,6 +101,18 @@
       "type": "runtime"
     },
     {
+      "name": "@graphql-yoga/common",
+      "type": "runtime"
+    },
+    {
+      "name": "@graphql-yoga/node",
+      "type": "runtime"
+    },
+    {
+      "name": "@vendia/serverless-express",
+      "type": "runtime"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.1.0",
       "type": "runtime"
@@ -112,6 +124,15 @@
     },
     {
       "name": "dayjs",
+      "type": "runtime"
+    },
+    {
+      "name": "graphql",
+      "type": "runtime"
+    },
+    {
+      "name": "graphql-yoga",
+      "version": "three",
       "type": "runtime"
     },
     {

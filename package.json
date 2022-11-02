@@ -45,9 +45,14 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.200.0",
     "@aws-sdk/lib-dynamodb": "^3.200.0",
+    "@graphql-yoga/common": "^2.12.12",
+    "@graphql-yoga/node": "^2.13.13",
+    "@vendia/serverless-express": "^4.10.1",
     "aws-cdk-lib": "^2.1.0",
     "constructs": "^10.0.5",
     "dayjs": "^1.11.6",
+    "graphql": "^16.6.0",
+    "graphql-yoga": "three",
     "reflect-metadata": "^0.1.13",
     "uuidv4": "^6.2.13"
   },
