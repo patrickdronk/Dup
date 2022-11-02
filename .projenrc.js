@@ -36,7 +36,7 @@ project.cdkTasks.deploy.reset('npx cdk deploy --require-approval never');
 const pro = project.github.addWorkflow('deploy');
 pro.on({
     push: {
-        branches: ['main'],
+        branches: ['master'],
     },
 });
 pro.addJob('deploy', {
