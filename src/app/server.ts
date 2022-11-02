@@ -9,6 +9,9 @@ new CommandProcessor(commandBus);
 
 const schema = createSchema({
     typeDefs: `
+    type Query {
+        me: String
+    }
     type Mutation {
       createBankAccount(aggregateId: String): String
       deposit(aggregateId: String, amount: Int): String
@@ -16,6 +19,9 @@ const schema = createSchema({
     }
   `,
     resolvers: {
+        Query: {
+            me: () => "hoi"
+        },
         Mutation: {
             createBankAccount: async (aggregateId: string) => {
                 await commandBus.dispatch("CreateBankAccountCommand", new CreateBankAccountCommand(aggregateId))
