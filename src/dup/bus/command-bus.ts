@@ -23,14 +23,16 @@ export class CommandBus implements ICommandBus {
     this.subscribers = {};
   }
 
-  public dispatch<T>(event: string, arg?: T): void {
+  public async dispatch<T>(event: string, arg?: T): Promise<void> {
     const subscriber = this.subscribers[event];
 
     if (subscriber === undefined) {
       return;
     }
 
-    Object.keys(subscriber).forEach((key) => subscriber[key](arg));
+    for (const key of Object.keys(subscriber)) {
+      await subscriber[key](arg);
+    }
   }
 
   public register(event: string, callback: Function): Registry {

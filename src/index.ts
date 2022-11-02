@@ -22,8 +22,7 @@ export const work = async (event: any) => {
   // const aggregateId = uuid();
 
   const command = getCommand(event.commandName, event.command)
-  commandBus.dispatch(event.commandName, command);
-  await timeout(2000);
+  await commandBus.dispatch(event.commandName, command);
 
   // commandBus.dispatch('DepositCommand', new DepositCommand(aggregateId, 50));
   // await timeout(2000);
