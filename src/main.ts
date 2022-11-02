@@ -1,11 +1,14 @@
 import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 // import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
+import { DockerImageFunction, DockerImageCode } from 'aws-cdk-lib/aws-lambda';
 import * as events from 'aws-cdk-lib/aws-events';
 // import * as targets from "aws-cdk-lib/aws-events-targets"
 import { EventBus } from 'aws-cdk-lib/aws-events';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+// import { Code, Function } from 'aws-cdk-lib/aws-lambda';
+// import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
+import path from 'path';
 
 export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -51,26 +54,20 @@ export class MyStack extends Stack {
       },
     });
 
-    const dup = new NodejsFunction(this, 'dup-temp-runner', {
-      entry: 'src/index.ts',
-      handler: 'work',
-      bundling: {
-        forceDockerBundling: true,
-        preCompilation: true,
-        commandHooks: {
-          beforeInstall(_inputDir: string, _outputDir: string): string[] {
-            return [];
-          },
-          beforeBundling(_inputDir: string, _outputDir: string): string[] {
-            return ['tsc'];
-          },
-          afterBundling(_inputDir: string, _outputDir: string): string[] {
-            return [];
-          },
+    const dockerFile = path.join(__dirname, '../Dockerfile')
 
-        },
-      },
-    });
+    const dup = new DockerImageFunction(this, 'dup-docker-runner', {
+      code: DockerImageCode.fromImageAsset(dockerFile)
+    })
+
+    // const dup = new NodejsFunction(this, 'dup-temp-runner', {
+    //   entry: 'src/index.ts',
+    //   handler: 'work',
+    //   bundling: {
+    //     preCompilation: true,
+    //   },
+    // });
+
 
     table.grantReadWriteData(dup);
   }

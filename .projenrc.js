@@ -15,6 +15,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   ],
   devDeps: [
     '@types/reflect-metadata',
+    'esbuild-plugin-tsc'
   ],
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */

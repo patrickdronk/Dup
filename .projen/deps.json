@@ -33,6 +33,10 @@
       "type": "build"
     },
     {
+      "name": "esbuild-plugin-tsc",
+      "type": "build"
+    },
+    {
       "name": "eslint-import-resolver-node",
       "type": "build"
     },

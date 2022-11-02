@@ -25,4 +25,3 @@ export const work = async () => {
   await timeout(2000);
   commandBus.dispatch('WithdrawalCommand', new WithdrawalCommand(aggregateId, 20));
 };
-
