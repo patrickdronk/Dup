@@ -25,6 +25,8 @@ export class CommandBus implements ICommandBus {
 
   public dispatch<T>(event: string, arg?: T): void {
     const subscriber = this.subscribers[event];
+    console.log("subscriber:", subscriber)
+    console.log("subscribers:", this.subscribers)
 
     if (subscriber === undefined) {
       return;
