@@ -30,8 +30,12 @@ export class CommandBus implements ICommandBus {
       return;
     }
 
-    for (const key of Object.keys(subscriber)) {
-      await subscriber[key](arg);
+    try {
+      for (const key of Object.keys(subscriber)) {
+        await subscriber[key](arg);
+      }
+    } catch(err: any) {
+      throw new Error(err.message)
     }
   }
 
