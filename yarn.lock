@@ -2654,9 +2654,9 @@ concat-map@0.0.1:
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
 constructs@^10.0.5:
-  version "10.1.147"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.1.147.tgz#5ca388fd546ea87bc520f1705ea8de6dc00d03ab"
-  integrity sha512-rM2Mc5PJ+zS4h2T2zJeUQTLYYOs4vHaXGCV8a1P+s3aknL8ATmgKui4cOMypa6yJxFW2b74VcgRpt/dhA2eE6g==
+  version "10.1.154"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.1.154.tgz#9ac3ee1305c4cecc7bced3d4097fa9886f3ccc65"
+  integrity sha512-JStQT84+NhsfamESRExZoGzpq/f/gpq9xpzgtQNOzungs42Gy8kxjfU378MnVoRqwCHwk0vLN37HZjgH5tJo2A==
 
 conventional-changelog-config-spec@^2.1.0:
   version "2.1.0"
