@@ -1,11 +1,12 @@
+import path, { join } from 'path';
 import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import * as events from 'aws-cdk-lib/aws-events';
 import { EventBus } from 'aws-cdk-lib/aws-events';
+import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
-import path from 'path';
 import 'reflect-metadata';
+import * as glob from 'glob';
 import * as fs from 'fs';
 
 export class MyStack extends Stack {
@@ -17,7 +18,7 @@ export class MyStack extends Stack {
     });
 
     // const cooleLambda = new NodejsFunction(this, 'MyFunction', {
-    //     entry: 'src/app/test.ts',
+    //     entry: 'src/app/findandprocessprocessors.ts',
     //     handler: 'handler',
     // });
     //
@@ -25,57 +26,16 @@ export class MyStack extends Stack {
 
     //VIKTOR --> TODO
     // zoek in src naar alle files die eindigen op .processor
-    // of gebruik reflectie
-
-    // Reflection. Test wanneer reflection in de pipeline werkt
-    // placeholder
-
-    //const outputvikkie = Reflect.getMetadataKeys(this);
-
-    //console.log(this);
 
     // todo: make recursive and relative
     // maybe use const {resolve} = require("path");
-    const processorDir = "/Users/viktorschelling/cc-hackathon-dup/src/app/bankAccount";
-    var files = fs.readdirSync(processorDir).filter(fn => fn.endsWith('.processor.ts'));
+    const appDir = path.join(__dirname, '/app');
+    const processors = getProcessors(appDir);
 
-    console.log(files);
-
-    files.forEach(function(filename) {
-      console.log(processorDir + filename);
-      fs.readFile(processorDir + '/' + filename, 'utf-8', function(err, filecontent) {
-        if (err) {
-          throw err;
-        }
-        const content = filecontent;
-
-        // Invoke the next step here however you like
-        processFile(content);   // Or put the next step in a function and invoke it
-      });
-
-
-      function processFile(content: string) {
-
-        // Match the first word after "event: " ignoring whitespace and including all new lines, made with autoregen.xyz :-)
-        const regex = /event:\s*\n*\s*(.*)/gm;
-        let m;
-        while ((m = regex.exec(content)) !== null) {
-          // This is necessary to avoid infinite loops with zero-width matches
-          if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
-          }
-
-          // The result can be accessed through the `m`-variable.
-          m.forEach((match, groupIndex) => {
-            console.log(`Found match, group ${groupIndex}: ${match}`);
-          });
-        }
-
-      }
-
+    processors.forEach((filename: string) => {
+      const fileContent = fs.readFileSync(`${appDir}/${filename}`, 'utf-8');
+      processFile(fileContent);
     });
-
-
 
     new events.Rule(this, 'fiveMinuteRule', {
       eventBus: customEventBus,
@@ -106,15 +66,41 @@ export class MyStack extends Stack {
       },
     });
 
-    const dockerFile = path.join(__dirname, '../')
+    const dockerFile = path.join(__dirname, '../');
 
     const dup = new DockerImageFunction(this, 'dup-docker-runner', {
-      code: DockerImageCode.fromImageAsset(dockerFile)
-    })
+      code: DockerImageCode.fromImageAsset(dockerFile),
+    });
 
-    dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE })
+    dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE });
 
     table.grantReadWriteData(dup);
+
+  }
+}
+
+const getProcessors = (appDir: string) => {
+  return glob
+    .sync('**/*processor.ts', { cwd: appDir })
+    .map((p) => join(appDir, p));
+};
+
+function processFile(content: string) {
+  console.log(processFile);
+  // Match the first word after "event: " ignoring whitespace and including all new lines, made with autoregen.xyz :-)
+  // const regex = /event:\s*\n*\s*(.*)/gm;
+  const regex = /([a-z]{2})\w+/gm;
+  let m;
+  while ((m = regex.exec(content)) !== null) {
+    // This is necessary to avoid infinite loops with zero-width matches
+    if (m.index === regex.lastIndex) {
+      regex.lastIndex++;
+    }
+
+    // The result can be accessed through the `m`-variable.
+    m.forEach((match, groupIndex) => {
+      console.log(`Found match, group ${groupIndex}: ${match}`);
+    });
   }
 }
 
