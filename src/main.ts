@@ -6,8 +6,16 @@ import { EventBus } from 'aws-cdk-lib/aws-events';
 import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import 'reflect-metadata';
+import { readFileSync } from 'fs';
 import * as glob from 'glob';
-import * as fs from 'fs';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+
+interface ProcessFileResponse {
+  processorName: string,
+  processorFilePath: string,
+  processorEvents: string[]
+}
 
 export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -17,33 +25,25 @@ export class MyStack extends Stack {
       eventBusName: 'dup-event-bus',
     });
 
-    // const cooleLambda = new NodejsFunction(this, 'MyFunction', {
-    //     entry: 'src/app/findandprocessprocessors.ts',
-    //     handler: 'handler',
-    // });
-    //
-    // const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda);
+    const processorFiles = handleProcessorFiles()
 
-    //VIKTOR --> TODO
-    // zoek in src naar alle files die eindigen op .processor
+    for(let processor of processorFiles) {
+        const processorLambda = new NodejsFunction(this, `lambda-${processor.processorName}`, {
+          functionName: processor.processorName,
+          entry: processor.processorFilePath,
+          handler: 'handler'
+        })
 
-    // todo: make recursive and relative
-    // maybe use const {resolve} = require("path");
-    const appDir = path.join(__dirname, '/app');
-    const processors = getProcessors(appDir);
-
-    processors.forEach((filename: string) => {
-      const fileContent = fs.readFileSync(`${appDir}/${filename}`, 'utf-8');
-      processFile(fileContent);
-    });
-
-    new events.Rule(this, 'fiveMinuteRule', {
-      eventBus: customEventBus,
-      eventPattern: {
-        detailType: ['dup-event-bus'],
-      },
-      targets: [],
-    });
+        for(let event of processor.processorEvents) {
+          new events.Rule(this, `rule-${processor.processorName}`, {
+            eventBus: customEventBus,
+            eventPattern: {
+              detailType: [event]
+            },
+            targets: [new LambdaFunction(processorLambda)]
+          })
+        }
+    }
 
     const table = new Table(this, 'eventsDB', {
       tableName: 'events',
@@ -75,33 +75,47 @@ export class MyStack extends Stack {
     dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE });
 
     table.grantReadWriteData(dup);
-
   }
 }
 
-const getProcessors = (appDir: string) => {
-  return glob
-    .sync('**/*processor.ts', { cwd: appDir })
-    .map((p) => join(appDir, p));
+export const processFile = (filePath: string): string[] => {
+  let events = []
+
+  //read the contents of the file
+  const fileContent = readFileSync(filePath, 'utf-8');
+
+  const regex = /event:?\s+(\w+)/gm;
+  const matches = fileContent.matchAll(regex);
+
+  for (const match of matches) {
+    events.push(match[1])
+  }
+
+  return events;
 };
 
-function processFile(content: string) {
-  console.log(processFile);
-  // Match the first word after "event: " ignoring whitespace and including all new lines, made with autoregen.xyz :-)
-  // const regex = /event:\s*\n*\s*(.*)/gm;
-  const regex = /([a-z]{2})\w+/gm;
-  let m;
-  while ((m = regex.exec(content)) !== null) {
-    // This is necessary to avoid infinite loops with zero-width matches
-    if (m.index === regex.lastIndex) {
-      regex.lastIndex++;
-    }
+export const handleProcessorFiles = (): ProcessFileResponse[] => {
+  let files: ProcessFileResponse[] = []
 
-    // The result can be accessed through the `m`-variable.
-    m.forEach((match, groupIndex) => {
-      console.log(`Found match, group ${groupIndex}: ${match}`);
-    });
+  const cwd = join(__dirname, 'app');
+  const processorFilePaths = glob
+      .sync('**/*processor.ts', { cwd })
+      .map((p) => join(cwd, p));
+
+  for (let processorFilePath of processorFilePaths) {
+    const splittedFilePath = processorFilePath.split('/');
+
+    const processorEvents = processFile(processorFilePath);
+    const processorName =splittedFilePath[splittedFilePath.length - 1];
+
+    files.push({
+      processorFilePath,
+      processorEvents,
+      processorName
+    })
   }
+
+  return files
 }
 
 const app = new App();

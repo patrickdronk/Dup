@@ -2,12 +2,15 @@ import { Aggregate } from '../../dup/aggregate';
 import { CommandHandler, EventHandler } from '../../dup/decorators';
 import { CreateBankAccountCommand, DepositCommand, WithdrawalCommand } from './commands';
 import { BankAccountCreatedEvent, DepositEvent, WithdrawalEvent } from './events';
+import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
 
 export class BankAccountAggregate extends Aggregate {
   private balance: number = 0;
+  private eventBridge: EventBridgeClient;
 
   constructor() {
     super();
+    this.eventBridge = new EventBridgeClient({region: "eu-west-1"})
   }
 
   @CommandHandler
@@ -32,11 +35,31 @@ export class BankAccountAggregate extends Aggregate {
 
   @EventHandler
   async on(_event: BankAccountCreatedEvent) {
+    const command = new PutEventsCommand({
+      Entries: [
+        {
+          Detail: _event.aggregateId,
+          DetailType: "BankAccountCreatedEvent"
+        }
+      ]
+    })
+
+    await this.eventBridge.send(command)
     this.balance = 0;
   }
 
   @EventHandler
   async onDeposit(event: DepositEvent) {
+    const command = new PutEventsCommand({
+      Entries: [
+        {
+          Detail: event.aggregateId,
+          DetailType: "DepositEvent"
+        }
+      ]
+    })
+
+    await this.eventBridge.send(command)
     this.balance += event.amount;
   }
 
