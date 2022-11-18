@@ -3,18 +3,18 @@ import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import * as events from 'aws-cdk-lib/aws-events';
 import { EventBus } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import 'reflect-metadata';
 import { readFileSync } from 'fs';
 import * as glob from 'glob';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
 interface ProcessFileResponse {
-  processorName: string,
-  processorFilePath: string,
-  processorEvents: string[]
+  processorName: string;
+  processorFilePath: string;
+  processorEvents: string[];
 }
 
 export class MyStack extends Stack {
@@ -25,24 +25,23 @@ export class MyStack extends Stack {
       eventBusName: 'dup-event-bus',
     });
 
-    const processorFiles = handleProcessorFiles()
+    const processorFiles = handleProcessorFiles();
+    for (let processor of processorFiles) {
+      const processorLambda = new NodejsFunction(this, `lambda-${processor.processorName}`, {
+        functionName: processor.processorName.replaceAll('.', '_'),
+        entry: processor.processorFilePath,
+        handler: 'handler',
+      });
 
-    for(let processor of processorFiles) {
-        const processorLambda = new NodejsFunction(this, `lambda-${processor.processorName}`, {
-          functionName: processor.processorName,
-          entry: processor.processorFilePath,
-          handler: 'handler'
-        })
-
-        for(let event of processor.processorEvents) {
-          new events.Rule(this, `rule-${processor.processorName}`, {
-            eventBus: customEventBus,
-            eventPattern: {
-              detailType: [event]
-            },
-            targets: [new LambdaFunction(processorLambda)]
-          })
-        }
+      for (let event of processor.processorEvents) {
+        new events.Rule(this, `rule-${processor.processorName}`, {
+          eventBus: customEventBus,
+          eventPattern: {
+            detailType: [event],
+          },
+          targets: [new LambdaFunction(processorLambda)],
+        });
+      }
     }
 
     const table = new Table(this, 'eventsDB', {
@@ -79,7 +78,7 @@ export class MyStack extends Stack {
 }
 
 export const processFile = (filePath: string): string[] => {
-  let events = []
+  let events = [];
 
   //read the contents of the file
   const fileContent = readFileSync(filePath, 'utf-8');
@@ -88,35 +87,35 @@ export const processFile = (filePath: string): string[] => {
   const matches = fileContent.matchAll(regex);
 
   for (const match of matches) {
-    events.push(match[1])
+    events.push(match[1]);
   }
 
   return events;
 };
 
 export const handleProcessorFiles = (): ProcessFileResponse[] => {
-  let files: ProcessFileResponse[] = []
+  let files: ProcessFileResponse[] = [];
 
   const cwd = join(__dirname, 'app');
   const processorFilePaths = glob
-      .sync('**/*processor.ts', { cwd })
-      .map((p) => join(cwd, p));
+    .sync('**/*processor.ts', { cwd })
+    .map((p) => join(cwd, p));
 
   for (let processorFilePath of processorFilePaths) {
     const splittedFilePath = processorFilePath.split('/');
 
     const processorEvents = processFile(processorFilePath);
-    const processorName =splittedFilePath[splittedFilePath.length - 1];
+    const processorName = splittedFilePath[splittedFilePath.length - 1];
 
     files.push({
       processorFilePath,
       processorEvents,
-      processorName
-    })
+      processorName,
+    });
   }
 
-  return files
-}
+  return files;
+};
 
 const app = new App();
 
