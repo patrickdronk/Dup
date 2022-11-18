@@ -12,7 +12,7 @@ export const processFile = (filePath: string) => {
     console.log(match[1]);
   }
 
-  const regexHandler = /(d{1,3}.){3}d{1,3}/gm
+  const regexHandler = /(d{1,3}.){3}d{1,3}/gm;
   const handlerMatches = fileContent.matchAll(regexHandler);
   for (const match of handlerMatches) {
     console.log(match[1]);
@@ -22,12 +22,12 @@ export const processFile = (filePath: string) => {
 export const handleProcessorFiles = () => {
   const cwd = join(__dirname, 'app');
   const entrypoints = glob
-      .sync('**/*processor.ts', { cwd })
-      .map((p) => join(cwd, p));
+    .sync('**/*processor.ts', { cwd })
+    .map((p) => join(cwd, p));
 
   for (let entrypoint of entrypoints) {
     processFile(entrypoint);
   }
-}
+};
 
 
