@@ -18,8 +18,11 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@graphql-yoga/common',
     '@graphql-yoga/node',
     '@vendia/serverless-express',
+    'aws-lambda',
+    '@aws-sdk/client-eventbridge'
   ],
   devDeps: [
+    '@types/aws-lambda',
     '@types/reflect-metadata',
     '@types/glob',
     'esbuild-plugin-tsc',
