@@ -1,7 +1,10 @@
+import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
 import dayjs from 'dayjs';
 import { uuid } from 'uuidv4';
 import { DomainEvent, IEvent } from './event/event';
 import { save } from './eventRepository';
+
+const eventBridge = new EventBridgeClient({ region: 'eu-west-1' });
 
 export abstract class Aggregate {
   async apply(event: IEvent): Promise<void> {
@@ -14,6 +17,13 @@ export abstract class Aggregate {
       payloadType: event.constructor.name,
       timestamp: dayjs().toISOString(),
     });
+
+    await eventBridge.send(new PutEventsCommand({
+      Entries: [{
+        DetailType: event.constructor.name,
+        Detail: JSON.stringify(event),
+      }],
+    }));
   }
 
   rebuildState(events: DomainEvent[]): void {
