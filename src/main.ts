@@ -1,12 +1,21 @@
+import path, { join } from 'path';
 import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import * as events from 'aws-cdk-lib/aws-events';
 import { EventBus } from 'aws-cdk-lib/aws-events';
+import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
-import path from 'path';
 import 'reflect-metadata';
-import * as fs from 'fs';
+import { readFileSync } from 'fs';
+import * as glob from 'glob';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+
+interface ProcessFileResponse {
+  processorName: string,
+  processorFilePath: string,
+  processorEvents: string[]
+}
 
 export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -16,74 +25,25 @@ export class MyStack extends Stack {
       eventBusName: 'dup-event-bus',
     });
 
-    // const cooleLambda = new NodejsFunction(this, 'MyFunction', {
-    //     entry: 'src/app/test.ts',
-    //     handler: 'handler',
-    // });
-    //
-    // const cooleLambdaTarget = new targets.LambdaFunction(cooleLambda);
+    const processorFiles = handleProcessorFiles()
 
-    //VIKTOR --> TODO
-    // zoek in src naar alle files die eindigen op .processor
-    // of gebruik reflectie
+    for(let processor of processorFiles) {
+        const processorLambda = new NodejsFunction(this, `lambda-${processor.processorName}`, {
+          functionName: processor.processorName,
+          entry: processor.processorFilePath,
+          handler: 'handler'
+        })
 
-    // Reflection. Test wanneer reflection in de pipeline werkt
-    // placeholder
-
-    //const outputvikkie = Reflect.getMetadataKeys(this);
-
-    //console.log(this);
-
-    // todo: make recursive and relative
-    // maybe use const {resolve} = require("path");
-    const processorDir = "/Users/viktorschelling/cc-hackathon-dup/src/app/bankAccount";
-    var files = fs.readdirSync(processorDir).filter(fn => fn.endsWith('.processor.ts'));
-
-    console.log(files);
-
-    files.forEach(function(filename) {
-      console.log(processorDir + filename);
-      fs.readFile(processorDir + '/' + filename, 'utf-8', function(err, filecontent) {
-        if (err) {
-          throw err;
+        for(let event of processor.processorEvents) {
+          new events.Rule(this, `rule-${processor.processorName}`, {
+            eventBus: customEventBus,
+            eventPattern: {
+              detailType: [event]
+            },
+            targets: [new LambdaFunction(processorLambda)]
+          })
         }
-        const content = filecontent;
-
-        // Invoke the next step here however you like
-        processFile(content);   // Or put the next step in a function and invoke it
-      });
-
-
-      function processFile(content: string) {
-
-        // Match the first word after "event: " ignoring whitespace and including all new lines, made with autoregen.xyz :-)
-        const regex = /event:\s*\n*\s*(.*)/gm;
-        let m;
-        while ((m = regex.exec(content)) !== null) {
-          // This is necessary to avoid infinite loops with zero-width matches
-          if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
-          }
-
-          // The result can be accessed through the `m`-variable.
-          m.forEach((match, groupIndex) => {
-            console.log(`Found match, group ${groupIndex}: ${match}`);
-          });
-        }
-
-      }
-
-    });
-
-
-
-    new events.Rule(this, 'fiveMinuteRule', {
-      eventBus: customEventBus,
-      eventPattern: {
-        detailType: ['dup-event-bus'],
-      },
-      targets: [],
-    });
+    }
 
     const table = new Table(this, 'eventsDB', {
       tableName: 'events',
@@ -106,16 +66,56 @@ export class MyStack extends Stack {
       },
     });
 
-    const dockerFile = path.join(__dirname, '../')
+    const dockerFile = path.join(__dirname, '../');
 
     const dup = new DockerImageFunction(this, 'dup-docker-runner', {
-      code: DockerImageCode.fromImageAsset(dockerFile)
-    })
+      code: DockerImageCode.fromImageAsset(dockerFile),
+    });
 
-    dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE })
+    dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE });
 
     table.grantReadWriteData(dup);
   }
+}
+
+export const processFile = (filePath: string): string[] => {
+  let events = []
+
+  //read the contents of the file
+  const fileContent = readFileSync(filePath, 'utf-8');
+
+  const regex = /event:?\s+(\w+)/gm;
+  const matches = fileContent.matchAll(regex);
+
+  for (const match of matches) {
+    events.push(match[1])
+  }
+
+  return events;
+};
+
+export const handleProcessorFiles = (): ProcessFileResponse[] => {
+  let files: ProcessFileResponse[] = []
+
+  const cwd = join(__dirname, 'app');
+  const processorFilePaths = glob
+      .sync('**/*processor.ts', { cwd })
+      .map((p) => join(cwd, p));
+
+  for (let processorFilePath of processorFilePaths) {
+    const splittedFilePath = processorFilePath.split('/');
+
+    const processorEvents = processFile(processorFilePath);
+    const processorName =splittedFilePath[splittedFilePath.length - 1];
+
+    files.push({
+      processorFilePath,
+      processorEvents,
+      processorName
+    })
+  }
+
+  return files
 }
 
 const app = new App();
