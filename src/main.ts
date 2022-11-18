@@ -34,7 +34,7 @@ export class MyStack extends Stack {
       });
 
       for (let event of processor.processorEvents) {
-        new events.Rule(this, `rule-${processor.processorName}`, {
+        new events.Rule(this, `rule-${processor.processorName}-${event}`, {
           eventBus: customEventBus,
           eventPattern: {
             detailType: [event],
