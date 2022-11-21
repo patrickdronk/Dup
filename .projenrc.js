@@ -11,7 +11,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@aws-sdk/lib-dynamodb',
     '@aws-sdk/client-dynamodb',
     'dayjs',
-    'uuidv4',
+    'uuid',
     'glob',
     'graphql',
     'graphql-yoga@three',
@@ -25,6 +25,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@types/aws-lambda',
     '@types/reflect-metadata',
     '@types/glob',
+    '@types/uuid',
     'esbuild-plugin-tsc',
   ],
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
