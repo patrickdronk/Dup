@@ -1,4 +1,4 @@
-import { BankAccountAggregate } from './bankAccount/bankAccountAggregate';
+import { BankAccountAggregate } from './bankAccount/bankAccount.aggregate';
 
 export const AggregateStore: any = {
   BankAccountAggregate,

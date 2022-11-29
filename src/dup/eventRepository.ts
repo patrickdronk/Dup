@@ -20,7 +20,7 @@ export const save = async (event: DomainEvent) => {
   }
 };
 
-export const getAllDomainEventsByAggregateId = async(aggregateId: string) => {
+export const getAllDomainEventsByAggregateId = async (aggregateId: string) => {
   const queryCommand = new QueryCommand({
     TableName: 'events',
     IndexName: 'aggregateIdIdx',
@@ -35,7 +35,7 @@ export const getAllDomainEventsByAggregateId = async(aggregateId: string) => {
 
   const { Items: items } = await db.send(queryCommand);
 
-  const sortedItems = items!!.sort(function(a,b){
+  const sortedItems = items!!.sort(function (a, b) {
     // @ts-ignore
     return new Date(a.timestamp) - new Date(b.timestamp);
   });

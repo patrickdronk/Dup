@@ -37,6 +37,14 @@ export class MyStack extends Stack {
 
     customEventBus.grantPutEventsTo(dup);
 
+    const bankAccountProjectionsTable = new Table(this, 'bankAccountProjectionsDB', {
+      tableName: 'bankAccountProjection',
+      partitionKey: {
+        name: 'aggregateId',
+        type: AttributeType.STRING,
+      },
+    });
+
     const processorFiles = handleProcessorFiles();
     for (let processor of processorFiles) {
       const processorLambda = new NodejsFunction(this, `lambda-${processor.processorName}`, {
@@ -46,6 +54,8 @@ export class MyStack extends Stack {
         memorySize: 1024,
         timeout: Duration.seconds(30),
       });
+
+      bankAccountProjectionsTable.grantReadWriteData(processorLambda);
 
       for (let event of processor.processorEvents) {
         new events.Rule(this, `rule-${processor.processorName}-${event}`, {
@@ -83,7 +93,8 @@ export class MyStack extends Stack {
   }
 }
 
-export const processFile = (filePath: string): string[] => {
+//ToDo what does processFile do?
+const processFile = (filePath: string): string[] => {
   let events = [];
 
   //read the contents of the file
@@ -99,14 +110,15 @@ export const processFile = (filePath: string): string[] => {
   return events;
 };
 
+//ToDo what does handleProcessorFiles do?
 export const handleProcessorFiles = (): ProcessFileResponse[] => {
-  let files: ProcessFileResponse[] = [];
-
   const cwd = join(__dirname, 'app');
   const processorFilePaths = glob
     .sync('**/*processor.ts', { cwd })
     .map((p) => join(cwd, p));
 
+  //ToDo refactor to use map function
+  let files: ProcessFileResponse[] = [];
   for (let processorFilePath of processorFilePaths) {
     const splittedFilePath = processorFilePath.split('/');
 

@@ -39,7 +39,6 @@
 // async onWithdrawal(event: WithdrawalEvent) {
 //   this.balance -= event.amount;
 // }
-//
 // private isBalanceSufficient(amountToDeduct: number): boolean {
 //   return this.balance >= amountToDeduct;
 // }
@@ -53,11 +52,13 @@
 // async handleDepositEvent(event: DepositEvent) {
 //   console.log(`Increment the balance of the bankaccount ${event.aggregateId} by ${event.amount}`);
 // }
+//
+// async handleWithdrawalEvent(event: WithdrawalEvent) {
+//   console.log(`Decrement the balance of the bankaccount ${event.aggregateId} by ${event.amount}`);
+// }
 //endregion
 
 //region emailprocessor
-// import {BankAccountCreatedEvent, DepositEvent} from "./src/app/bankAccount/events";
-//
 // async handleCreatedEvent(event: BankAccountCreatedEvent) {
 //   console.log(`Sending email to ${event.aggregateId}`);
 // }
@@ -65,3 +66,4 @@
 // async handleDepositEvent(_event: DepositEvent) {
 //   console.log('Sending mail about deposit');
 // }
+//endregion
