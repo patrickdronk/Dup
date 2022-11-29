@@ -8,7 +8,6 @@ const eventBridgeClient = new EventBridgeClient({});
 
 export abstract class Aggregate {
   async apply(event: IEvent): Promise<void> {
-    console.log(event);
     try {
       await save({
         eventId: v4(),

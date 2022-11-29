@@ -1,8 +1,8 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { EventBridgeEvent } from 'aws-lambda';
-import { BankAccountCreatedEvent, DepositEvent, WithdrawalEvent } from '../events';
 
+//region some setup that doesn't belong here
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
 
@@ -11,25 +11,9 @@ export interface BankAccountProjection {
   balance: number;
 }
 
+//endregion
+
 class BankaccountProjectionProcessor {
-  async handleCreatedEvent(event: BankAccountCreatedEvent) {
-    await this.save({
-      aggregateId: event.aggregateId,
-      balance: 0,
-    });
-  }
-
-  async handleDepositEvent(event: DepositEvent) {
-    const bankAccountProjection = await this.fetch(event.aggregateId);
-    bankAccountProjection.balance += event.amount;
-    await this.save(bankAccountProjection);
-  }
-
-  async handleWithdrawalEvent(event: WithdrawalEvent) {
-    const bankAccountProjection = await this.fetch(event.aggregateId);
-    bankAccountProjection.balance -= event.amount;
-    await this.save(bankAccountProjection);
-  }
 
   async fetch(aggregateId: string): Promise<BankAccountProjection> {
     const command = new GetCommand({
@@ -64,6 +48,7 @@ class BankaccountProjectionProcessor {
   }
 }
 
+//region generate processor
 const processor = new BankaccountProjectionProcessor();
 
 export const handler = async (handlerEvent: EventBridgeEvent<any, any>) => {
@@ -81,3 +66,4 @@ export const handler = async (handlerEvent: EventBridgeEvent<any, any>) => {
     }
   }
 };
+//endregion

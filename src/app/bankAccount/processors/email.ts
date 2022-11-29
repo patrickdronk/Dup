@@ -1,16 +1,10 @@
 import { EventBridgeEvent } from 'aws-lambda';
-import { BankAccountCreatedEvent, DepositEvent } from '../events';
 
 export class EmailProcessor {
-  async handleCreatedEvent(event: BankAccountCreatedEvent) {
-    console.log(`Sending email to ${event.aggregateId}`);
-  }
 
-  async handleDepositEvent(_event: DepositEvent) {
-    console.log('Sending mail about deposit');
-  }
 }
 
+//region generate processor
 const processor = new EmailProcessor();
 
 export const handler = async (handlerEvent: EventBridgeEvent<any, any>) => {
@@ -24,3 +18,4 @@ export const handler = async (handlerEvent: EventBridgeEvent<any, any>) => {
     }
   }
 };
+//endregion

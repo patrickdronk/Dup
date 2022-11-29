@@ -1,10 +1,4 @@
 //region bankaccountaggregate
-// private balance: number = 0;
-//
-// constructor() {
-//   super();
-// }
-//
 // @CommandHandler
 // async handle(command: CreateBankAccountCommand) {
 //   const event = new BankAccountCreatedEvent(command.aggregateId);
@@ -39,22 +33,26 @@
 // async onWithdrawal(event: WithdrawalEvent) {
 //   this.balance -= event.amount;
 // }
-// private isBalanceSufficient(amountToDeduct: number): boolean {
-//   return this.balance >= amountToDeduct;
-// }
 //endregion
 
 //region bankaccountprojectionprocessor
 // async handleCreatedEvent(event: BankAccountCreatedEvent) {
-//   console.log(`Create a projection for this new bankaccount ${event.aggregateId}`);
+//   await this.save({
+//     aggregateId: event.aggregateId,
+//     balance: 0,
+//   });
 // }
 //
 // async handleDepositEvent(event: DepositEvent) {
-//   console.log(`Increment the balance of the bankaccount ${event.aggregateId} by ${event.amount}`);
+//   const bankAccountProjection = await this.fetch(event.aggregateId);
+//   bankAccountProjection.balance += event.amount;
+//   await this.save(bankAccountProjection);
 // }
 //
 // async handleWithdrawalEvent(event: WithdrawalEvent) {
-//   console.log(`Decrement the balance of the bankaccount ${event.aggregateId} by ${event.amount}`);
+//   const bankAccountProjection = await this.fetch(event.aggregateId);
+//   bankAccountProjection.balance -= event.amount;
+//   await this.save(bankAccountProjection);
 // }
 //endregion
 
