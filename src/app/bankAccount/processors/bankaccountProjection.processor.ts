@@ -17,10 +17,11 @@ export const handler = async (handlerEvent: EventBridgeEvent<any, any>) => {
   switch (handlerEvent['detail-type']) {
     case 'BankAccountCreatedEvent': {
       await processor.handleCreatedEvent(handlerEvent.detail);
-    }
       break;
+    }
     case 'DepositEvent': {
       await processor.handleDepositEvent(handlerEvent.detail);
+      break;
     }
   }
 };

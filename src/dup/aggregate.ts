@@ -8,9 +8,8 @@ const eventBridgeClient = new EventBridgeClient({});
 
 export abstract class Aggregate {
   async apply(event: IEvent): Promise<void> {
+    console.log(event);
     try {
-
-
       await save({
         eventId: v4(),
         aggregateId: event.aggregateId,
@@ -25,7 +24,7 @@ export abstract class Aggregate {
         Entries: [{
           Source: 'BankAccountAggregate',
           EventBusName: 'dup-event-bus',
-          DetailType: 'BankAccountCreatedEvent',
+          DetailType: event.constructor.name,
           Detail: JSON.stringify(event),
         }],
       }));
