@@ -5,7 +5,7 @@ import { createSchema } from 'graphql-yoga';
 import { CommandBus } from '../dup/bus/command-bus';
 import { CommandProcessor } from '../dup/commandProcessor';
 import { CreateBankAccountCommand, DepositCommand, WithdrawalCommand } from './bankAccount/commands';
-import { BankAccountProjection } from './bankAccount/processors/bankaccountProjection';
+import { BankAccountProjection } from './bankAccount/processors/bankaccountProjection.processor';
 
 const commandBus = new CommandBus();
 new CommandProcessor(commandBus);
