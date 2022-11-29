@@ -1,5 +1,5 @@
 import { EventBridgeEvent } from 'aws-lambda';
-import { BankAccountCreatedEvent, DepositEvent } from '../events';
+import { BankAccountCreatedEvent, DepositEvent, WithdrawalEvent } from '../events';
 
 class BankaccountProjectionProcessor {
   async handleCreatedEvent(event: BankAccountCreatedEvent) {
@@ -8,6 +8,10 @@ class BankaccountProjectionProcessor {
 
   async handleDepositEvent(event: DepositEvent) {
     console.log(`Increment the balance of the bankaccount ${event.aggregateId} by ${event.amount}`);
+  }
+
+  async handleWithdrawalEvent(event: WithdrawalEvent) {
+    console.log(`Decrement the balance of the bankaccount ${event.aggregateId} by ${event.amount}`);
   }
 }
 
@@ -22,6 +26,9 @@ export const handler = async (handlerEvent: EventBridgeEvent<any, any>) => {
     case 'DepositEvent': {
       await processor.handleDepositEvent(handlerEvent.detail);
       break;
+    }
+    case 'WithdrawalEvent': {
+      await processor.handleWithdrawalEvent(handlerEvent.detail);
     }
   }
 };
