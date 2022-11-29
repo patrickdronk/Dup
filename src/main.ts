@@ -1,5 +1,5 @@
 import path, { join } from 'path';
-import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { App, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import * as events from 'aws-cdk-lib/aws-events';
 import { EventBus } from 'aws-cdk-lib/aws-events';
@@ -21,9 +21,21 @@ export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id, props);
 
+    const dockerFile = path.join(__dirname, '../');
+
+    const dup = new DockerImageFunction(this, 'dup-docker-runner', {
+      code: DockerImageCode.fromImageAsset(dockerFile),
+      functionName: 'dup-docker-runner',
+      memorySize: 1024,
+      timeout: Duration.seconds(30),
+    });
+    dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE });
+
     const customEventBus = new EventBus(this, 'CustomEventBus', {
       eventBusName: 'dup-event-bus',
     });
+
+    customEventBus.grantPutEventsTo(dup);
 
     const processorFiles = handleProcessorFiles();
     for (let processor of processorFiles) {
@@ -31,6 +43,8 @@ export class MyStack extends Stack {
         functionName: processor.processorName.replaceAll('.', '_'),
         entry: processor.processorFilePath,
         handler: 'handler',
+        memorySize: 1024,
+        timeout: Duration.seconds(30),
       });
 
       for (let event of processor.processorEvents) {
@@ -64,14 +78,6 @@ export class MyStack extends Stack {
         type: AttributeType.STRING,
       },
     });
-
-    const dockerFile = path.join(__dirname, '../');
-
-    const dup = new DockerImageFunction(this, 'dup-docker-runner', {
-      code: DockerImageCode.fromImageAsset(dockerFile),
-    });
-
-    dup.addFunctionUrl({ authType: FunctionUrlAuthType.NONE });
 
     table.grantReadWriteData(dup);
   }

@@ -1,29 +1,37 @@
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
 import dayjs from 'dayjs';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 import { DomainEvent, IEvent } from './event/event';
 import { save } from './eventRepository';
 
-const eventBridge = new EventBridgeClient({ region: 'eu-west-1' });
+const eventBridgeClient = new EventBridgeClient({});
 
 export abstract class Aggregate {
   async apply(event: IEvent): Promise<void> {
-    await save({
-      eventId: uuid(),
-      aggregateId: event.aggregateId,
-      aggregateType: 'BankaccountAggregate', //fixMe
-      eventSequenceNumber: 1, //fixMe
-      payload: JSON.stringify(event),
-      payloadType: event.constructor.name,
-      timestamp: dayjs().toISOString(),
-    });
+    try {
 
-    await eventBridge.send(new PutEventsCommand({
-      Entries: [{
-        DetailType: event.constructor.name,
-        Detail: JSON.stringify(event),
-      }],
-    }));
+
+      await save({
+        eventId: v4(),
+        aggregateId: event.aggregateId,
+        aggregateType: 'BankaccountAggregate', //fixMe
+        eventSequenceNumber: 1, //fixMe
+        payload: JSON.stringify(event),
+        payloadType: event.constructor.name,
+        timestamp: dayjs().toISOString(),
+      });
+
+      await eventBridgeClient.send(new PutEventsCommand({
+        Entries: [{
+          Source: 'BankAccountAggregate',
+          EventBusName: 'dup-event-bus',
+          DetailType: 'BankAccountCreatedEvent',
+          Detail: JSON.stringify(event),
+        }],
+      }));
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   rebuildState(events: DomainEvent[]): void {
