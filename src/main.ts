@@ -45,6 +45,9 @@ export class MyStack extends Stack {
       },
     });
 
+    bankAccountProjectionsTable.grantReadData(dup);
+
+
     const processorFiles = handleProcessorFiles();
     for (let processor of processorFiles) {
       const processorLambda = new NodejsFunction(this, `lambda-${processor.processorName}`, {

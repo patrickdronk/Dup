@@ -1,16 +1,22 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { createServer, GraphQLYogaError } from '@graphql-yoga/node';
 import { createSchema } from 'graphql-yoga';
 import { CommandBus } from '../dup/bus/command-bus';
 import { CommandProcessor } from '../dup/commandProcessor';
 import { CreateBankAccountCommand, DepositCommand, WithdrawalCommand } from './bankAccount/commands';
+import { BankAccountProjection } from './bankAccount/processors/bankaccountProjection';
 
 const commandBus = new CommandBus();
 new CommandProcessor(commandBus);
 
+const client = new DynamoDBClient({});
+const db = DynamoDBDocumentClient.from(client);
+
 const schema = createSchema({
   typeDefs: `
     type Query {
-        balance: String
+        balance(aggregateId: String): number
     }
     type Mutation {
       createBankAccount(aggregateId: String): String
@@ -20,7 +26,22 @@ const schema = createSchema({
   `,
   resolvers: {
     Query: {
-      balance: () => 'hoi',
+      balance: async (_, { aggregateId }) => {
+        const command = new GetCommand({
+          TableName: 'bankAccountProjection',
+          Key: {
+            aggregateId: aggregateId,
+          },
+        });
+
+        try {
+          const result = await db.send(command);
+          return result.Item as BankAccountProjection;
+        } catch (err: any) {
+          console.error(err);
+          throw err;
+        }
+      },
     },
     Mutation: {
       createBankAccount: async (_, { aggregateId }) => {

@@ -6,7 +6,7 @@ import { BankAccountCreatedEvent, DepositEvent, WithdrawalEvent } from '../event
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
 
-interface BankAccountProjection {
+export interface BankAccountProjection {
   aggregateId: string;
   balance: number;
 }
