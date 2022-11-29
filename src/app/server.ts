@@ -16,7 +16,7 @@ const db = DynamoDBDocumentClient.from(client);
 const schema = createSchema({
   typeDefs: `
     type Query {
-        balance(aggregateId: String): number
+        balance(aggregateId: String): Int
     }
     type Mutation {
       createBankAccount(aggregateId: String): String
