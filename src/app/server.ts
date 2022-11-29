@@ -36,7 +36,8 @@ const schema = createSchema({
 
         try {
           const result = await db.send(command);
-          return result.Item as BankAccountProjection;
+          const bankAccountProjection = result.Item as BankAccountProjection;
+          return bankAccountProjection.balance;
         } catch (err: any) {
           console.error(err);
           throw err;
