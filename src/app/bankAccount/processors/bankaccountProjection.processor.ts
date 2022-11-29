@@ -19,7 +19,7 @@ export const handler = async (handlerEvent: EventBridgeEvent<any, any>) => {
       await processor.handleCreatedEvent(handlerEvent.detail);
     }
       break;
-    case DepositEvent.toString(): {
+    case 'DepositEvent': {
       await processor.handleDepositEvent(handlerEvent.detail);
     }
   }

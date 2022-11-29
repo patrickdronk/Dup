@@ -10,7 +10,7 @@ new CommandProcessor(commandBus);
 const schema = createSchema({
   typeDefs: `
     type Query {
-        me: String
+        balance: String
     }
     type Mutation {
       createBankAccount(aggregateId: String): String
