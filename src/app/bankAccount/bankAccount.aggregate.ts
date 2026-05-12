@@ -7,6 +7,11 @@ export class BankAccountAggregate extends Aggregate {
     super();
   }
 
+  @Commandhandler
+  public on(command: CreateBankAccountCommand): void {
+    this.apply(new BankAccountCreatedEvent());
+  }
+
   private isBalanceSufficient(amountToDeduct: number): boolean {
     return this.balance >= amountToDeduct;
   }
